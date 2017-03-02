@@ -5,7 +5,7 @@ endif ()
 
 enable_language(ASM)
 
-set(ARDUINO_CORE_DIR "${ARDUINO_PATH}/hardware/arduino/avr/cores/arduino/arduino.cmake")
+set(ARDUINO_CORE_DIR "${ARDUINO_PATH}/hardware/arduino/avr/cores/arduino/")
 set(ARDUINO_PINS_DIR "${ARDUINO_PATH}/hardware/arduino/avr/variants/${ARDUINO_VARIANT}")
 
 if (NOT AVRDUDE_CONFIG)
