@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(arduino-test)
 
-include(cmake/build-env.cmake)
+include(cmake/build-env.cmake.example)
 
 set(AVR_MCU "atmega328")
 set(AVR_FCPU "16000000")

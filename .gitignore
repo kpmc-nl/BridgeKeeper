@@ -1,5 +1,5 @@
 /.idea
 /.DS_Store
-
+/cmake/build-env.cmake
 /build
 /cmake-build-debug
