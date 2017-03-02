@@ -1,11 +1,11 @@
 
 if (NOT ARDUINO_PATH)
-    message(FATAL_ERROR "Specify the Arduino SDK path in the textfile arduino-path.txt")
+    message(FATAL_ERROR "Specify the Arduino SDK path in the textfile build-env.cmake")
 endif ()
 
 enable_language(ASM)
 
-set(ARDUINO_CORE_DIR "${ARDUINO_PATH}/hardware/arduino/avr/cores/arduino/")
+set(ARDUINO_CORE_DIR "${ARDUINO_PATH}/hardware/arduino/avr/cores/arduino/arduino.cmake")
 set(ARDUINO_PINS_DIR "${ARDUINO_PATH}/hardware/arduino/avr/variants/${ARDUINO_VARIANT}")
 
 if (NOT AVRDUDE_CONFIG)

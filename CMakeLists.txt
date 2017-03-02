@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 2.6)
 
 project(arduino-test)
 
-include(cmake/build-env.cmake.example)
+include(cmake/build-env.cmake)
 
-set(AVR_MCU "atmega328")
+set(AVR_MCU "atmega328p")
 set(AVR_FCPU "16000000")
 set(ARDUINO_VARIANT "standard")
 
@@ -12,9 +12,8 @@ add_definitions(-DARDUINO_ARCH_AVR)
 
 add_definitions(-DCMAKE_BUILD)
 
-set(AVRDUDE_CONFIG "${ATTINY_CORE_PATH}/avr/avrdude.conf")
 
-include(cmake/arduino-1.6.cmake)
+include(cmake/arduino.cmake)
 include(cmake/avr-toolchain.cmake)
 
 include_directories(${ARDUINO_PINS_DIR})
@@ -34,10 +33,7 @@ set(ARDUINO_SOURCE_FILES
         ${ARDUINO_CORE_DIR}/WString.cpp
         ${ARDUINO_CORE_DIR}/abi.cpp
         ${ARDUINO_CORE_DIR}/new.cpp
-
         )
-
-
 
 include_directories(src)
 
