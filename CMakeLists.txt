@@ -4,9 +4,9 @@ project(bridge-controller)
 
 include(cmake/build-env.cmake)
 
-set(AVR_MCU "atmega328p")
+set(AVR_MCU "atmega32u4")
 set(AVR_FCPU "16000000")
-set(ARDUINO_VARIANT "standard")
+set(ARDUINO_VARIANT "leonardo")
 
 add_definitions(-DARDUINO_ARCH_AVR)
 
@@ -25,8 +25,8 @@ set(ARDUINO_SOURCE_FILES
         ${ARDUINO_CORE_DIR}/wiring.c
         ${ARDUINO_CORE_DIR}/wiring_analog.c
         ${ARDUINO_CORE_DIR}/wiring_digital.c
-        ${ARDUINO_CORE_DIR}/HardwareSerial.cpp
-        ${ARDUINO_CORE_DIR}/HardwareSerial0.cpp
+#        ${ARDUINO_CORE_DIR}/HardwareSerial.cpp
+#        ${ARDUINO_CORE_DIR}/HardwareSerial0.cpp
         ${ARDUINO_CORE_DIR}/Print.cpp
         ${ARDUINO_CORE_DIR}/Stream.cpp
         ${ARDUINO_CORE_DIR}/WMath.cpp

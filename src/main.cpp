@@ -6,7 +6,7 @@
 Manchester manchester;
 
 
-uint8_t data[4] = {1,3,3,7};
+uint8_t data[4] = {'t','e','s','t'};
 
 int main(void) {
     // Mandatory init
@@ -14,14 +14,16 @@ int main(void) {
 
     pinMode(13, OUTPUT);
 
-    Serial.begin(9600);
-
     manchester.setupTransmit(5, MAN_300);
 
+    uint16_t idx =0;
     for (;;) {
         digitalWrite(13, HIGH);
-        manchester.transmitArray(4, data);
+
+        manchester.transmit(idx);
+
         digitalWrite(13, LOW);
         delay(2000);
+        idx=idx+1;
     }
 }
