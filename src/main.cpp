@@ -8,9 +8,12 @@ int main(void) {
 
     pinMode(13, OUTPUT);
 
+    Serial.begin(9600);
+
 
     while (true) {
         digitalWrite(13, HIGH);
+        Serial.println("whoop");
 
         delay(200);
 

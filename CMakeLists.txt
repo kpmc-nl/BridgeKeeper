@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(arduino-test)
+project(bridge-lightpole)
 
 include(cmake/build-env.cmake)
 
@@ -39,6 +39,9 @@ include_directories(src)
 
 set(SOURCE_FILES
         ${ARDUINO_SOURCE_FILES}
+
+        src/Manchester.h
+        src/Manchester.cpp
 
         src/main.cpp
         )
