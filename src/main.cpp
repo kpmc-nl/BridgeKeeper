@@ -6,32 +6,38 @@ Manchester man;
 
 #define RX_PIN 5
 
-uint8_t buffer[4];
+uint8_t buffer[2]={0,0};
 
 void setup() {
+
     pinMode(8, OUTPUT);
     pinMode(9, OUTPUT);
     pinMode(10, OUTPUT);
     pinMode(11, OUTPUT);
 
-    buffer[0] = 255;
+    pinMode(RX_PIN, INPUT);
+    Serial.begin(9600);
+    Serial.println("Initialized");
 
-    man.setupReceive(RX_PIN, MAN_9600);
+
+    man.setupReceive(RX_PIN, MAN_1200);
     man.beginReceiveArray(4, buffer);
 }
 
 void loop() {
     if (man.receiveComplete()) {
-        digitalWrite(8, (buffer[0] >> 0) & 1);
-        digitalWrite(9, (buffer[0] >> 1) & 1);
-        digitalWrite(10, (buffer[0] >> 2) & 1);
-        digitalWrite(11, (buffer[0] >> 3) & 1);
 
-        digitalWrite(13, HIGH);
-        delay(20);
-        digitalWrite(13, LOW);
 
-        man.beginReceiveArray(4, buffer);
+        Serial.print("got data: ");
+
+        Serial.print(buffer[0]);
+        Serial.print(" - ");
+        Serial.print(buffer[1]);
+        Serial.println();
+
+        PORTB = buffer[1];
+
+        man.beginReceiveArray(2, buffer);
     }
 }
 
