@@ -10,10 +10,7 @@ uint8_t buffer[2]={0,0};
 
 void setup() {
 
-    pinMode(8, OUTPUT);
-    pinMode(9, OUTPUT);
-    pinMode(10, OUTPUT);
-    pinMode(11, OUTPUT);
+    DDRB = 0x0f;
 
     pinMode(RX_PIN, INPUT);
     Serial.begin(9600);
