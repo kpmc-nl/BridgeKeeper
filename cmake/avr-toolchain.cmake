@@ -1,15 +1,8 @@
-if (NOT AVR_GCC)
-    find_program(AVR_GCC avr-gcc)
-endif ()
-if (NOT AVR_G++)
-    find_program(AVR_G++ avr-g++)
-endif ()
-if (NOT AVR_OBJCOPY)
-    find_program(AVR_OBJCOPY avr-objcopy)
-endif ()
-if (NOT AVRDUDE)
-    find_program(AVRDUDE avrdude)
-endif ()
+find_program(AVR_GCC avr-gcc)
+find_program(AVR_G++ avr-g++)
+find_program(AVR_OBJCOPY avr-objcopy)
+find_program(AVRDUDE avrdude)
+
 
 if (NOT AVR_GCC)
     message(FATAL_ERROR "Please install avr-gcc")
@@ -29,10 +22,11 @@ set(CMAKE_C_COMPILER ${AVR_GCC})
 set(CMAKE_CXX_COMPILER ${AVR_G++})
 set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 
-set(AVR_FLAGS "-mmcu=${AVR_MCU} -DF_CPU=${AVR_FCPU}")
+# C only fine tuning
+set(C_TUNING_FLAGS "-funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums")
 
-set(CMAKE_CXX_FLAGS "${AVR_FLAGS} -Os -std=gnu++11 -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -Wall ")
-set(CMAKE_C_FLAGS "${AVR_FLAGS} -Os -std=gnu99 -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wall ")
+set(CMAKE_CXX_FLAGS "-mmcu=${AVR_MCU} -DF_CPU=${AVR_FCPU} -Os")
+set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} ${C_TUNING_FLAGS} -Wall -Wstrict-prototypes -std=gnu99")
 
 add_custom_target(hex)
 add_dependencies(hex ${CMAKE_PROJECT_NAME})
@@ -45,5 +39,5 @@ add_custom_target(flash)
 add_dependencies(flash hex)
 
 add_custom_command(TARGET flash POST_BUILD
-        COMMAND ${AVRDUDE} -v -C${AVRDUDE_CONFIG} -p${AVR_MCU} ${AVRDUDE_PROGRAMMER_FLAGS} -Uflash:w:${CMAKE_PROJECT_NAME}.hex:i
+        COMMAND ${AVRDUDE} -v -p${AVR_MCU} ${AVRDUDE_PROGRAMMER_FLAGS} -Uflash:w:${CMAKE_PROJECT_NAME}.hex:i
         )
