@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 2.6)
 project(BridgeKeeper)
 
-set(CMAKE_CXX_STANDARD 11)
+include_directories(include)
 
-set(SOURCE_FILES main.cpp)
-add_executable(BridgeKeeper ${SOURCE_FILES})
+add_subdirectory(controller)
+add_subdirectory(lightpole)

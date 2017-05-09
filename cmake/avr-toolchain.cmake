@@ -28,16 +28,16 @@ set(C_TUNING_FLAGS "-funsigned-char -funsigned-bitfields -fpack-struct -fshort-e
 set(CMAKE_CXX_FLAGS "-mmcu=${AVR_MCU} -DF_CPU=${AVR_FCPU} -Os")
 set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} ${C_TUNING_FLAGS} -Wall -Wstrict-prototypes -std=gnu99")
 
-add_custom_target(hex)
-add_dependencies(hex ${CMAKE_PROJECT_NAME})
+add_custom_target(${PROJECT_NAME}_hex)
+add_dependencies(${PROJECT_NAME}_hex ${PROJECT_NAME})
 
-add_custom_command(TARGET hex POST_BUILD
-        COMMAND ${AVR_OBJCOPY} -O ihex -R .eeprom ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME} ${CMAKE_PROJECT_NAME}.hex
+add_custom_command(TARGET ${PROJECT_NAME}_hex POST_BUILD
+        COMMAND ${AVR_OBJCOPY} -O ihex -R .eeprom ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME} ${PROJECT_NAME}.hex
         )
 
-add_custom_target(flash)
-add_dependencies(flash hex)
+add_custom_target(${PROJECT_NAME}_flash)
+add_dependencies(${PROJECT_NAME}_flash ${PROJECT_NAME}_hex)
 
-add_custom_command(TARGET flash POST_BUILD
-        COMMAND ${AVRDUDE} -v -p${AVR_MCU} ${AVRDUDE_PROGRAMMER_FLAGS} -Uflash:w:${CMAKE_PROJECT_NAME}.hex:i
+add_custom_command(TARGET ${PROJECT_NAME}_flash POST_BUILD
+        COMMAND ${AVRDUDE} -v -p${AVR_MCU} ${AVRDUDE_PROGRAMMER_FLAGS} -Uflash:w:${PROJECT_NAME}.hex:i
         )

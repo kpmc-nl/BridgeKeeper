@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(bridge-controller)
+project(controller)
 
-include(cmake/build-env.cmake)
+include(env.cmake)
 
 set(AVR_MCU "atmega32u4")
 set(AVR_FCPU "16000000")
@@ -13,8 +13,8 @@ add_definitions(-DARDUINO_ARCH_AVR)
 add_definitions(-DCMAKE_BUILD)
 
 
-include(cmake/arduino.cmake)
-include(cmake/avr-toolchain.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/avr-toolchain.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/arduino.cmake)
 
 include_directories(${ARDUINO_PINS_DIR})
 include_directories(${ARDUINO_CORE_DIR})
@@ -47,4 +47,5 @@ set(SOURCE_FILES
 
         )
 
-add_executable(${CMAKE_PROJECT_NAME} ${SOURCE_FILES})
+# A phony executable for this module, to keep cmake happy
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})

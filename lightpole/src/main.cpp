@@ -8,6 +8,7 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+
 Manchester man;
 
 #define RX_PIN PB2
