@@ -25,8 +25,6 @@ set(ARDUINO_SOURCE_FILES
         ${ARDUINO_CORE_DIR}/wiring.c
         ${ARDUINO_CORE_DIR}/wiring_analog.c
         ${ARDUINO_CORE_DIR}/wiring_digital.c
-#        ${ARDUINO_CORE_DIR}/HardwareSerial.cpp
-#        ${ARDUINO_CORE_DIR}/HardwareSerial0.cpp
         ${ARDUINO_CORE_DIR}/Print.cpp
         ${ARDUINO_CORE_DIR}/Stream.cpp
         ${ARDUINO_CORE_DIR}/WMath.cpp
@@ -35,15 +33,16 @@ set(ARDUINO_SOURCE_FILES
         ${ARDUINO_CORE_DIR}/new.cpp
         )
 
-include_directories(src)
+include_directories(../manchester)
+include_directories(../protocol)
 
 set(SOURCE_FILES
         ${ARDUINO_SOURCE_FILES}
 
-        src/Manchester.h
-        src/Manchester.cpp
+        ../manchester/Manchester.h
+        ../manchester/Manchester.cpp
 
-        src/main.cpp
+        main.cpp
 
         )
 
