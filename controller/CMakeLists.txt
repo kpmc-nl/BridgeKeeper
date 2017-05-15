@@ -2,16 +2,13 @@ cmake_minimum_required(VERSION 2.6)
 
 project(controller)
 
-include(env.cmake)
-
 set(AVR_MCU "atmega32u4")
 set(AVR_FCPU "16000000")
 set(ARDUINO_VARIANT "leonardo")
 
+include(env.cmake)
+
 add_definitions(-DARDUINO_ARCH_AVR)
-
-add_definitions(-DCMAKE_BUILD)
-
 
 include(${CMAKE_SOURCE_DIR}/cmake/avr-toolchain.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/arduino.cmake)
