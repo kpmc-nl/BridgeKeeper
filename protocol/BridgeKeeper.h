@@ -5,15 +5,16 @@
 #ifndef BRIDGEKEEPER_H
 #define BRIDGEKEEPER_H
 
+#define HIGH 0x1
+#define LOW  0x0
+
 typedef struct {
-    unsigned int light1 : 1;
-    unsigned int light2 : 1;
-    unsigned int light3 : 1;
-    unsigned int light4 : 1;
+    uint8_t light1 = LOW;
+    uint8_t light2 = LOW;
+    uint8_t light3 = LOW;
+    uint8_t light4 = LOW;
 
 } lightpole_msg_t;
-
-
 
 
 #endif //BRIDGEKEEPER_H

@@ -1,44 +1,69 @@
 
 
 #include <Arduino.h>
+#include <BridgeKeeper.h>
 #include "Manchester.h"
 
 Manchester man;
-Manchester man2;
 
 #define TX_PIN 5
-#define TX2_PIN 6
 
-uint8_t buffer[2]= {2,0};
-uint8_t buffer2[2]= {2,0};
+lightpole_msg_t pole1;
+
+void setup() {
+    pinMode(13, OUTPUT);
+    pinMode(TX_PIN, OUTPUT);
+
+    for (int i = 0; i < sizeof(lightpole_msg_t); i++) {
+        digitalWrite(13, HIGH);
+        delay(200);
+        digitalWrite(13, LOW);
+        delay(200);
+    }
+
+    man.setupTransmit(TX_PIN, MAN_300);
+}
+
+void transmit() {
+    uint8_t buf[sizeof(lightpole_msg_t) + 1];
+    buf[0] = sizeof(lightpole_msg_t) + 1;
+
+    memcpy(buf + 1, &pole1, sizeof(lightpole_msg_t));
+    man.transmitArray(sizeof(lightpole_msg_t) + 1, buf);
+
+    digitalWrite(13, HIGH);
+    delay(100);
+    digitalWrite(13, LOW);
+}
+
 
 int main() {
     init();
+    setup();
 
-    pinMode(13, OUTPUT);
-
-    pinMode(TX_PIN, OUTPUT);
-    pinMode(TX2_PIN, OUTPUT);
-    man.setupTransmit(TX_PIN, MAN_300);
-    man2.setupTransmit(TX2_PIN, MAN_300);
 
     while (1) {
 
-        man.transmitArray(2, buffer);
-        man2.transmitArray(2, buffer2);
-
-        digitalWrite(13, HIGH);
-        delay(100);
-        digitalWrite(13, LOW);
+        pole1.light1 = HIGH;
+        transmit();
+        delay(1000);
+        pole1.light2 = HIGH;
+        transmit();
+        delay(1000);
+        pole1.light3 = HIGH;
+        transmit();
+        delay(1000);
+        pole1.light4 = HIGH;
+        transmit();
         delay(1000);
 
+        pole1.light1 = LOW;
+        pole1.light2 = LOW;
+        pole1.light3 = LOW;
+        pole1.light4 = LOW;
+        transmit();
+        delay(1000);
 
-        if(buffer[1] >= 15){
-            buffer[1] = 0;
-        }else{
-            buffer[1]++;
-        }
-        buffer2[1] = 15 - buffer[1];
 
     }
 }
