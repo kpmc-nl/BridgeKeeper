@@ -1,5 +1,3 @@
-
-
 #include <Arduino.h>
 #include <BridgeKeeper.h>
 #include "Manchester.h"

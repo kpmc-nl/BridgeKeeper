@@ -1,11 +1,6 @@
-/**
- * Firmware for an RC speed controller with a circuit based on some FETs and two relays
- */
-
 #include <Arduino.h>
 #include <BridgeKeeper.h>
 #include "Manchester.h"
-
 
 Manchester man;
 lightpole_msg_t pole;

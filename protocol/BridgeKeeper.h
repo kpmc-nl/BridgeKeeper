@@ -1,7 +1,3 @@
-//
-// Created by Matthijs Oosterhoff on 09/05/2017.
-//
-
 #ifndef BRIDGEKEEPER_H
 #define BRIDGEKEEPER_H
 
