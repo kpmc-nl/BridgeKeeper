@@ -7,6 +7,7 @@ enable_language(ASM)
 
 set(ARDUINO_CORE_DIR "${ARDUINO_PATH}/hardware/arduino/avr/cores/arduino/")
 set(ARDUINO_PINS_DIR "${ARDUINO_PATH}/hardware/arduino/avr/variants/${ARDUINO_VARIANT}")
+set(ARDUINO_LIB_DIR "${ARDUINO_PATH}/hardware/arduino/avr/libraries")
 
 if (NOT AVRDUDE_CONFIG)
     set(AVRDUDE_CONFIG "${ARDUINO_PATH}/hardware/tools/avr/etc/avrdude.conf")
