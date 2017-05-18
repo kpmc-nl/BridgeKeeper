@@ -13,9 +13,6 @@ add_definitions(-DARDUINO_ARCH_AVR)
 include(${CMAKE_SOURCE_DIR}/cmake/avr-toolchain.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/arduino.cmake)
 
-include_directories(${ARDUINO_PINS_DIR})
-include_directories(${ARDUINO_CORE_DIR})
-
 set(ARDUINO_SOURCE_FILES
 
         ${ARDUINO_CORE_DIR}/hooks.c
@@ -43,5 +40,4 @@ set(SOURCE_FILES
 
         )
 
-# A phony executable for this module, to keep cmake happy
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+add_avr_firmware(${PROJECT_NAME} ${SOURCE_FILES})
