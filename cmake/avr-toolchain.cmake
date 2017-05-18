@@ -47,6 +47,8 @@ endif(NOT AVR_PROGRAMMER_PORT)
 
 set(CMAKE_C_FLAGS "-Os")
 set(CMAKE_CXX_FLAGS "-Os")
+set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
+set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 
 
 ##########################################################################
