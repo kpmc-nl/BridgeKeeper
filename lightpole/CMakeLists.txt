@@ -1,8 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
 
-# let cmake know we are cross-compiling
-set(CMAKE_SYSTEM_NAME Generic)
-
 project(lightpole)
 
 include(env.cmake)
@@ -12,11 +9,8 @@ set(AVR_FCPU "1000000")
 
 add_definitions(-DARDUINO_ARCH_AVR)
 
-#set(AVRDUDE_CONFIG "${CMAKE_CURRENT_SOURCE_DIR}/avrdude.conf")
-
 include(${CMAKE_SOURCE_DIR}/cmake/arduino.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/avr-toolchain.cmake)
-
 
 include_directories(${ATTINY_CORE_PATH}/avr/cores/tiny)
 include_directories(${ATTINY_CORE_PATH}/avr/variants/tinyX5)
@@ -43,5 +37,4 @@ set(SOURCE_FILES
         main.cpp
         )
 
-# A phony executable for this module, to keep cmake happy
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+add_avr_firmware(${PROJECT_NAME} ${SOURCE_FILES})

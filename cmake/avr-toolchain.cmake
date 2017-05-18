@@ -1,5 +1,6 @@
 find_program(AVR_GCC avr-gcc)
 find_program(AVR_G++ avr-g++)
+find_program(AVR_SIZE avr-size)
 find_program(AVR_OBJCOPY avr-objcopy)
 find_program(AVRDUDE avrdude)
 
@@ -13,31 +14,97 @@ endif ()
 if (NOT AVR_OBJCOPY)
     message(FATAL_ERROR "Please install avr-objcopy")
 endif ()
+if (NOT AVR_SIZE)
+    message(FATAL_ERROR "Please install avr-size")
+endif ()
 if (NOT AVRDUDE)
     message(FATAL_ERROR "Please install avrdude")
 endif ()
 
+if(NOT AVR_MCU)
+    message(FATAL_ERROR "Please specify AVR_MCU")
+endif()
+
+if(NOT AVR_FCPU)
+    message(FATAL_ERROR "Please specify AVR_FCPU")
+endif()
+
 set(CMAKE_SYSTEM_NAME Generic)
+set(CMAKE_SYSTEM_PROCESSOR avr)
 set(CMAKE_C_COMPILER ${AVR_GCC})
 set(CMAKE_CXX_COMPILER ${AVR_G++})
-set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
+#set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 
-# C only fine tuning
-set(C_TUNING_FLAGS "-funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums")
+if(NOT AVR_PROGRAMMER)
+    set(AVR_PROGRAMMER usbasp)
+endif(NOT AVR_PROGRAMMER)
 
-set(CMAKE_CXX_FLAGS "-mmcu=${AVR_MCU} -DF_CPU=${AVR_FCPU} -Os")
-set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} ${C_TUNING_FLAGS} -Wall -Wstrict-prototypes -std=gnu99")
 
-add_custom_target(${PROJECT_NAME}_hex)
-add_dependencies(${PROJECT_NAME}_hex ${PROJECT_NAME})
+if(NOT AVR_PROGRAMMER_PORT)
+    set(AVR_PROGRAMMER_PORT usb)
+endif(NOT AVR_PROGRAMMER_PORT)
 
-add_custom_command(TARGET ${PROJECT_NAME}_hex POST_BUILD
-        COMMAND ${AVR_OBJCOPY} -O ihex -R .eeprom ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME} ${PROJECT_NAME}.hex
-        )
 
-add_custom_target(${PROJECT_NAME}_flash)
-add_dependencies(${PROJECT_NAME}_flash ${PROJECT_NAME}_hex)
+set(CMAKE_C_FLAGS "-Os")
+set(CMAKE_CXX_FLAGS "-Os")
 
-add_custom_command(TARGET ${PROJECT_NAME}_flash POST_BUILD
-        COMMAND ${AVRDUDE} -v -p${AVR_MCU} ${AVRDUDE_PROGRAMMER_FLAGS} -Uflash:w:${PROJECT_NAME}.hex:i
-        )
+
+##########################################################################
+# compiler options for all build types
+##########################################################################
+add_definitions("-DF_CPU=${AVR_FCPU}")
+add_definitions("-fpack-struct")
+add_definitions("-fshort-enums")
+add_definitions("-Wall")
+#add_definitions("-Werror")
+#add_definitions("-pedantic")
+#add_definitions("-pedantic-errors")
+add_definitions("-funsigned-char")
+add_definitions("-funsigned-bitfields")
+add_definitions("-ffunction-sections")
+add_definitions("-c")
+
+
+function(add_avr_firmware FIRMWARE_NAME)
+    set(elf_file ${FIRMWARE_NAME}.elf)
+    set(hex_file ${FIRMWARE_NAME}.hex)
+    set(map_file ${FIRMWARE_NAME}.map)
+    set(eeprom_image ${FIRMWARE_NAME}-eeprom.hex)
+
+    # elf file
+    add_executable(${elf_file} EXCLUDE_FROM_ALL ${ARGN})
+
+    set_target_properties(
+            ${elf_file}
+            PROPERTIES
+            COMPILE_FLAGS "-mmcu=${AVR_MCU}"
+            LINK_FLAGS "-mmcu=${AVR_MCU} -Wl,--gc-sections -mrelax -Wl,-Map,${map_file}"
+    )
+
+    add_custom_target(
+            ${hex_file}
+            COMMAND
+            ${AVR_OBJCOPY} -j .text -j .data -O ihex ${elf_file} ${hex_file}
+            COMMAND
+            ${AVR_SIZE} -B ${elf_file}
+            DEPENDS ${elf_file}
+    )
+
+    # upload - with avrdude
+    add_custom_target(
+            ${FIRMWARE_NAME}_upload
+            ${AVRDUDE} -p ${AVR_MCU} -c ${AVR_PROGRAMMER} ${AVR_UPLOADTOOL_OPTIONS}
+            -U flash:w:${hex_file}
+            -P ${AVR_PROGRAMMER_PORT}
+            DEPENDS ${hex_file}
+            COMMENT "Uploading ${hex_file} to ${AVR_MCU} using ${AVR_PROGRAMMER}"
+    )
+
+    # get status
+    add_custom_target(
+            ${FIRMWARE_NAME}_get_status
+            ${AVRDUDE} -p ${AVR_MCU} -c ${AVR_PROGRAMMER} -P ${AVR_PROGRAMMER_PORT} -n -v
+            COMMENT "Get status from ${AVR_MCU}"
+    )
+
+endfunction(add_avr_firmware)

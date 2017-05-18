@@ -17,3 +17,6 @@ set(AVR_GCC ${ARDUINO_PATH}/hardware/tools/avr/bin/avr-gcc)
 set(AVR_G++ ${ARDUINO_PATH}/hardware/tools/avr/bin/avr-g++)
 set(AVR_OBJCOPY ${ARDUINO_PATH}/hardware/tools/avr/bin/avr-objcopy)
 set(AVRDUDE ${ARDUINO_PATH}/hardware/tools/avr/bin/avrdude -C${AVRDUDE_CONFIG})
+
+include_directories(${ARDUINO_PINS_DIR})
+include_directories(${ARDUINO_CORE_DIR})
