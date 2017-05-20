@@ -1,14 +1,15 @@
 #include <Arduino.h>
 #include <BridgeKeeper.h>
 #include "Manchester.h"
+#include <core_pins.h>
 
 Manchester pole1_manchester;
 
-#define TX_PIN 5
+#define TX_PIN PIN_A5
 
-#define BTN1_PIN 8
-#define BTN2_PIN 9
-#define BTN3_PIN 10
+#define BTN1_PIN PIN_A1
+#define BTN2_PIN PIN_A2
+#define BTN3_PIN PIN_A3
 
 remote_msg_t msg;
 uint8_t tx_buf[sizeof(remote_msg_t) + 1];
@@ -19,7 +20,7 @@ void setup() {
     tx_buf[0] = sizeof(remote_msg_t) + 1;
 
 
-    pinMode(13, OUTPUT);
+    pinMode(PIN_B2, OUTPUT);
     pinMode(BTN1_PIN, INPUT_PULLUP);
     pinMode(BTN2_PIN, INPUT_PULLUP);
     pinMode(BTN3_PIN, INPUT_PULLUP);
@@ -35,9 +36,9 @@ void transmit() {
     memcpy(tx_buf + 1, &msg, sizeof(remote_msg_t));
     pole1_manchester.transmitArray(sizeof(remote_msg_t) + 1, tx_buf);
 
-    digitalWrite(13, HIGH);
+    digitalWrite(PIN_B2, HIGH);
     delay(100);
-    digitalWrite(13, LOW);
+    digitalWrite(PIN_B2, LOW);
 }
 
 
@@ -59,6 +60,7 @@ boolean shouldSend() {
 
 int main() {
     init();
+
     setup();
 
     while (1) {
