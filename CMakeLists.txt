@@ -5,3 +5,4 @@ include_directories(protocol)
 
 add_subdirectory(controller)
 add_subdirectory(lightpole)
+add_subdirectory(remote)

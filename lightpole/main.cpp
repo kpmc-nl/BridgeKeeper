@@ -2,7 +2,7 @@
 #include <BridgeKeeper.h>
 #include "Manchester.h"
 
-Manchester man;
+Manchester pole1_manchester;
 lightpole_msg_t pole;
 
 uint8_t buffer[sizeof(lightpole_msg_t) + 1];
@@ -16,13 +16,13 @@ void setup() {
 
     pinMode(PB4, INPUT);
 
-    man.setupReceive(PB4, MAN_300);
-    man.beginReceiveArray(sizeof(lightpole_msg_t) + 1, buffer);
+    pole1_manchester.setupReceive(PB4, MAN_300);
+    pole1_manchester.beginReceiveArray(sizeof(lightpole_msg_t) + 1, buffer);
 }
 
 void loop() {
 
-    if (man.receiveComplete()) {
+    if (pole1_manchester.receiveComplete()) {
 
         if (buffer[0] != sizeof(lightpole_msg_t) + 1) {
             /* ignore */
@@ -37,7 +37,7 @@ void loop() {
         digitalWrite(PB2, pole.light3);
         digitalWrite(PB3, pole.light4);
 
-        man.beginReceiveArray(sizeof(lightpole_msg_t) + 1, buffer);
+        pole1_manchester.beginReceiveArray(sizeof(lightpole_msg_t) + 1, buffer);
     }
 
 }

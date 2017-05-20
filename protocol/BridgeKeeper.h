@@ -12,5 +12,12 @@ typedef struct {
 
 } lightpole_msg_t;
 
+typedef struct {
+    uint8_t button1 = LOW;
+    uint8_t button2 = LOW;
+    uint8_t button3 = LOW;
+
+} remote_msg_t;
+
 
 #endif //BRIDGEKEEPER_H
