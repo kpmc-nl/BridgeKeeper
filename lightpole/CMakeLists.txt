@@ -9,8 +9,8 @@ set(AVR_FCPU "1000000")
 
 add_definitions(-DARDUINO_ARCH_AVR)
 
-include(${CMAKE_SOURCE_DIR}/cmake/arduino.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/avr-toolchain.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/arduino.cmake)
 
 include_directories(${ATTINY_CORE_PATH}/avr/cores/tiny)
 include_directories(${ATTINY_CORE_PATH}/avr/variants/tinyX5)

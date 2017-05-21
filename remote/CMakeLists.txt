@@ -4,14 +4,14 @@ project(remote)
 
 set(AVR_MCU "attiny841")
 set(AVR_FCPU "8000000")
-set(AVRDUDE_CONFIG "${CMAKE_CURRENT_SOURCE_DIR}/avrdude.conf")
+set(AVRDUDE_OPTIONS -C${CMAKE_CURRENT_SOURCE_DIR}/avrdude.conf)
 
 include(env.cmake)
 
 add_definitions(-DARDUINO_ARCH_AVR)
 
-include(${CMAKE_SOURCE_DIR}/cmake/avr-toolchain.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/arduino.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/avr-toolchain.cmake)
 
 include_directories(${ATTINY_CORE_PATH}/avr/cores/tinymodern)
 include_directories(src)

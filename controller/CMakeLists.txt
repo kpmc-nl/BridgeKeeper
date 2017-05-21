@@ -10,8 +10,8 @@ include(env.cmake)
 
 add_definitions(-DARDUINO_ARCH_AVR)
 
-include(${CMAKE_SOURCE_DIR}/cmake/avr-toolchain.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/arduino.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/avr-toolchain.cmake)
 
 set(ARDUINO_SOURCE_FILES
 

@@ -1,8 +1,23 @@
-find_program(AVR_GCC avr-gcc)
-find_program(AVR_G++ avr-g++)
-find_program(AVR_SIZE avr-size)
-find_program(AVR_OBJCOPY avr-objcopy)
-find_program(AVRDUDE avrdude)
+
+if (NOT AVR_GCC)
+    find_program(AVR_GCC avr-gcc)
+endif ()
+
+if (NOT AVR_G++)
+    find_program(AVR_G++ avr-g++)
+endif ()
+
+if (NOT AVR_SIZE)
+    find_program(AVR_SIZE avr-size)
+endif ()
+
+if (NOT AVR_OBJCOPY)
+    find_program(AVR_OBJCOPY avr-objcopy)
+endif ()
+
+if (NOT AVRDUDE)
+    find_program(AVRDUDE avrdude)
+endif ()
 
 
 if (NOT AVR_GCC)
@@ -21,13 +36,26 @@ if (NOT AVRDUDE)
     message(FATAL_ERROR "Please install avrdude")
 endif ()
 
-if(NOT AVR_MCU)
+if (NOT AVR_MCU)
     message(FATAL_ERROR "Please specify AVR_MCU")
-endif()
+endif ()
 
-if(NOT AVR_FCPU)
+if (NOT AVR_FCPU)
     message(FATAL_ERROR "Please specify AVR_FCPU")
-endif()
+endif ()
+
+
+message(STATUS "Current avr-gcc is: ${AVR_GCC}")
+message(STATUS "Current avr-g++ is: ${AVR_G++}")
+message(STATUS "Current avr-objcopy is: ${AVR_OBJCOPY}")
+message(STATUS "Current avr-size is: ${AVR_SIZE}")
+
+message(STATUS "Current avrdude is: ${AVRDUDE}")
+message(STATUS "Current programmer is: ${AVR_PROGRAMMER}")
+message(STATUS "Current programmer port is: ${AVR_PROGRAMMER_PORT}")
+message(STATUS "Current avrdude options are: ${AVRDUDE_OPTIONS}")
+message(STATUS "Current MCU is set to: ${AVR_MCU}")
+message(STATUS "Current FCPU is set to: ${AVR_FCPU}")
 
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR avr)
@@ -35,14 +63,14 @@ set(CMAKE_C_COMPILER ${AVR_GCC})
 set(CMAKE_CXX_COMPILER ${AVR_G++})
 #set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 
-if(NOT AVR_PROGRAMMER)
+if (NOT AVR_PROGRAMMER)
     set(AVR_PROGRAMMER usbasp)
-endif(NOT AVR_PROGRAMMER)
+endif (NOT AVR_PROGRAMMER)
 
 
-if(NOT AVR_PROGRAMMER_PORT)
+if (NOT AVR_PROGRAMMER_PORT)
     set(AVR_PROGRAMMER_PORT usb)
-endif(NOT AVR_PROGRAMMER_PORT)
+endif (NOT AVR_PROGRAMMER_PORT)
 
 
 set(CMAKE_C_FLAGS "-Os")
@@ -95,7 +123,7 @@ function(add_avr_firmware FIRMWARE_NAME)
     # upload - with avrdude
     add_custom_target(
             ${FIRMWARE_NAME}_upload
-            ${AVRDUDE} -p ${AVR_MCU} -c ${AVR_PROGRAMMER} ${AVR_UPLOADTOOL_OPTIONS}
+            ${AVRDUDE} ${AVRDUDE_OPTIONS} -p ${AVR_MCU} -c ${AVR_PROGRAMMER}
             -U flash:w:${hex_file}
             -P ${AVR_PROGRAMMER_PORT}
             DEPENDS ${hex_file}
