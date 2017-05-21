@@ -25,7 +25,7 @@ void setup() {
 
     Serial.begin(38400);
     Serial.println("Initializing I2C devices...");
-    accelgyro.setDLPFMode(7);
+    accelgyro.setDLPFMode(6);
     accelgyro.initialize();
 
 
