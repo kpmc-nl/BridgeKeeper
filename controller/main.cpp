@@ -19,9 +19,15 @@ MPU6050 accelgyro;
 int16_t ax, ay, az;
 int16_t gx, gy, gz;
 
+boolean rising;
 
 void setup() {
     Wire.begin();
+
+    pinMode(3, OUTPUT);
+    pinMode(4, OUTPUT);
+    pinMode(5, OUTPUT);
+
 
     Serial.begin(38400);
     Serial.println("Initializing I2C devices...");
@@ -42,7 +48,7 @@ void loop() {
 
     // these methods (and a few others) are also available
 
-    accelgyro.getAccelFIFOEnabled();
+//    accelgyro.getAccelFIFOEnabled();
     accelgyro.getAcceleration(&ax, &ay, &az);
     accelgyro.getRotation(&gx, &gy, &gz);
 
@@ -67,7 +73,23 @@ void loop() {
     Serial.print("\t");
     Serial.println(gamma);
 
-    delay(500);
+    if(rising && beta < 130){
+        digitalWrite(3, HIGH);
+        digitalWrite(4, HIGH);
+        digitalWrite(5, LOW);
+        return;
+    }
+
+    if(!rising && beta > 89){
+        digitalWrite(3, HIGH);
+        digitalWrite(4, LOW);
+        digitalWrite(5, HIGH);
+        return;
+    }
+
+    rising = !rising;
+
+    delay(50);
 }
 
 
@@ -80,4 +102,17 @@ int main(){
     while(1){
         loop();
     }
+
+
+//    pinMode(3, OUTPUT);
+//    pinMode(4, OUTPUT);
+//    pinMode(5, OUTPUT);
+//
+//    while(1){
+//        digitalWrite(3, HIGH);
+//        digitalWrite(4, LOW);
+//        digitalWrite(5, HIGH);
+//    }
+
+
 }
