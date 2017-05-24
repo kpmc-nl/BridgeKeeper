@@ -1,57 +1,78 @@
-
-
-// I2Cdev and MPU6050 must be installed as libraries, or else the .cpp/.h files
-// for both classes must be in the include path of your project
-
 #include <Arduino.h>
-#include "I2Cdev.h"
-#include "MPU6050.h"
-#include "math.h"
-#include "Wire.h"
+#include <BridgeKeeper.h>
+#include <MPU6050.h>
+#include "Manchester.h"
 
-// class default I2C address is 0x68
-// specific I2C addresses may be passed as a parameter here
-// AD0 low = 0x68 (default for InvenSense evaluation board)
-// AD0 high = 0x69
+Manchester pole1_manchester;
+Manchester remote_rx_manchester;
+
 MPU6050 accelgyro;
-//MPU6050 accelgyro(0x69); // <-- use for AD0 high
 
-int16_t ax, ay, az;
-int16_t gx, gy, gz;
+double angleX, angleY, angleZ;
 
-boolean rising;
+#define TX_PIN 5
+#define RX_PIN 8
+
+lightpole_msg_t pole1;
+remote_msg_t remote_msg;
+uint8_t rx_buf[sizeof(remote_msg_t) + 1];
+
+enum State {
+    up, down, rising, falling
+};
+
+State state;
+State target;
 
 void setup() {
-    Wire.begin();
-
     pinMode(3, OUTPUT);
     pinMode(4, OUTPUT);
     pinMode(5, OUTPUT);
 
+    pinMode(13, OUTPUT);
+    pinMode(TX_PIN, OUTPUT);
 
     Serial.begin(38400);
+    Serial.print("Initializing...");
+
     Serial.println("Initializing I2C devices...");
     accelgyro.setDLPFMode(6);
     accelgyro.initialize();
-
-
 
     Serial.println("Testing device connections...");
     Serial.println(accelgyro.testConnection() ?
                    "MPU6050 connection successful" : "MPU6050 connection failed");
 
+    Serial.println("Initializing states...");
+    state = down;
+    target = down;
+
+    Serial.println("Initializing remote manchester...");
+    remote_rx_manchester.setupReceive(RX_PIN, MAN_300);
+    remote_rx_manchester.beginReceiveArray(sizeof(remote_msg_t) + 1, rx_buf);
+
+    Serial.println("Initializing pole1 manchester...");
+    pole1_manchester.setupTransmit(TX_PIN, MAN_300);
+
+    Serial.println("Initialized.");
 }
 
-void loop() {
-    // read raw accel/gyro measurements from device
-//    accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
+void transmit() {
+    uint8_t buf[sizeof(lightpole_msg_t) + 1];
+    buf[0] = sizeof(lightpole_msg_t) + 1;
 
-    // these methods (and a few others) are also available
+    memcpy(buf + 1, &pole1, sizeof(lightpole_msg_t));
+    pole1_manchester.transmitArray(sizeof(lightpole_msg_t) + 1, buf);
 
-//    accelgyro.getAccelFIFOEnabled();
+    digitalWrite(13, HIGH);
+    delay(100);
+    digitalWrite(13, LOW);
+}
+
+void getAngle(double *xTgt, double *yTgt, double *zTgt){
+    //TODO optimize this
+    int16_t ax, ay, az;
     accelgyro.getAcceleration(&ax, &ay, &az);
-    accelgyro.getRotation(&gx, &gy, &gz);
-
 
     double x = ax;
     double y = ay;
@@ -59,60 +80,95 @@ void loop() {
 
     double g = sqrt(x*x+y*y+z*z);
 
-    double alpha = acos(x/g);
-    double beta = acos(y/g);
-    double gamma = acos(z/g);
+    *xTgt = acos(x/g) *180 / M_PI;
+    *yTgt = acos(y/g) *180 / M_PI;
+    *zTgt = acos(z/g) *180 / M_PI;
 
-    alpha = alpha * 180 / M_PI;
-    beta = beta * 180 / M_PI;
-    gamma = gamma * 180 / M_PI;
+//    Serial.println("angles:\t");
+//    Serial.print(*xTgt);
+//    Serial.print("\t");
+//    Serial.print(*yTgt);
+//    Serial.print("\t");
+//    Serial.println(*zTgt);
+}
 
-    Serial.print(alpha);
-    Serial.print("\t");
-    Serial.print(beta);
-    Serial.print("\t");
-    Serial.println(gamma);
+void loop() {
 
-    if(rising && beta < 130){
-        digitalWrite(3, HIGH);
-        digitalWrite(4, HIGH);
-        digitalWrite(5, LOW);
-        return;
+
+
+    if (remote_rx_manchester.receiveComplete()) {
+
+        if (rx_buf[0] != sizeof(remote_msg_t) + 1) {
+            /* ignore */
+            return;
+        }
+
+        memcpy(&remote_msg, rx_buf + 1, sizeof(remote_msg_t));
+
+        if (remote_msg.button1) {
+            target = up;
+            Serial.println("want up");
+        } else if (remote_msg.button2) {
+            target = down;
+            Serial.println("want down");
+        } else if (remote_msg.button3) {
+            target = up;
+            Serial.println("want up");
+        }
+
+//        transmit(); TODO enable when adding lights back
+
+        remote_rx_manchester.beginReceiveArray(sizeof(remote_msg_t) + 1, rx_buf);
     }
 
-    if(!rising && beta > 89){
-        digitalWrite(3, HIGH);
+    getAngle(&angleX, &angleY, &angleZ);
+
+    if (state == target) {
+        digitalWrite(3, HIGH); // brake ??
         digitalWrite(4, LOW);
-        digitalWrite(5, HIGH);
-        return;
+        digitalWrite(5, LOW);
+    } else {
+
+        switch (target) {
+            case up:
+                digitalWrite(3, HIGH);
+                digitalWrite(4, HIGH);
+                digitalWrite(5, LOW);
+                state = rising;
+                if(angleY > 135){
+                    Serial.println("Bridge is up");
+                    state = up;
+                }
+
+                break;
+            case down:
+
+                if(angleY < 92){
+                    analogWrite(5, 192);
+                }else{
+                    digitalWrite(5, HIGH);
+                }
+                digitalWrite(3, HIGH);
+                digitalWrite(4, LOW);
+//                digitalWrite(5, HIGH);
+                state = falling;
+                if(angleY < 89){
+                    Serial.println("Bridge is down");
+                    state = down;
+                }
+
+                break;
+        }
     }
 
-    rising = !rising;
-
-    delay(50);
 }
 
 
-
-
-
-int main(){
+int main() {
     init();
     setup();
-    while(1){
+
+    while (true) {
         loop();
     }
-
-
-//    pinMode(3, OUTPUT);
-//    pinMode(4, OUTPUT);
-//    pinMode(5, OUTPUT);
-//
-//    while(1){
-//        digitalWrite(3, HIGH);
-//        digitalWrite(4, LOW);
-//        digitalWrite(5, HIGH);
-//    }
-
-
 }
