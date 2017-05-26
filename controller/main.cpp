@@ -2,6 +2,7 @@
 #include <BridgeKeeper.h>
 #include <MPU6050.h>
 #include "Manchester.h"
+#include "pwmutil.h"
 
 Manchester pole1_manchester;
 Manchester remote_rx_manchester;
@@ -9,6 +10,8 @@ Manchester remote_rx_manchester;
 MPU6050 accelgyro;
 
 double angleX, angleY, angleZ;
+
+double downTargetAngle;
 
 #define TX_PIN 5
 #define RX_PIN 8
@@ -25,15 +28,19 @@ State state;
 State target;
 
 void setup() {
-    pinMode(3, OUTPUT);
-    pinMode(4, OUTPUT);
-    pinMode(5, OUTPUT);
+    pinMode(A0, INPUT);
 
+    pinMode(5, OUTPUT);
+    pinMode(6, OUTPUT);
+
+    pinMode(11, OUTPUT);
+    pinMode(12, OUTPUT);
     pinMode(13, OUTPUT);
     pinMode(TX_PIN, OUTPUT);
 
     Serial.begin(38400);
     Serial.print("Initializing...");
+
 
     Serial.println("Initializing I2C devices...");
     accelgyro.setDLPFMode(6);
@@ -69,7 +76,7 @@ void transmit() {
     digitalWrite(13, LOW);
 }
 
-void getAngle(double *xTgt, double *yTgt, double *zTgt){
+void getAngle(double *xTgt, double *yTgt, double *zTgt) {
     //TODO optimize this
     int16_t ax, ay, az;
     accelgyro.getAcceleration(&ax, &ay, &az);
@@ -78,11 +85,11 @@ void getAngle(double *xTgt, double *yTgt, double *zTgt){
     double y = ay;
     double z = az;
 
-    double g = sqrt(x*x+y*y+z*z);
+    double g = sqrt(x * x + y * y + z * z);
 
-    *xTgt = acos(x/g) *180 / M_PI;
-    *yTgt = acos(y/g) *180 / M_PI;
-    *zTgt = acos(z/g) *180 / M_PI;
+    *xTgt = acos(x / g) * 180 / M_PI;
+    *yTgt = acos(y / g) * 180 / M_PI;
+    *zTgt = acos(z / g) * 180 / M_PI;
 
 //    Serial.println("angles:\t");
 //    Serial.print(*xTgt);
@@ -92,15 +99,39 @@ void getAngle(double *xTgt, double *yTgt, double *zTgt){
 //    Serial.println(*zTgt);
 }
 
-void loop() {
+void readTargetPot() {
+    double tgt = map(analogRead(A0), 0, 1023, 850, 950);
+    tgt /= 10.0;
 
+    if (tgt != downTargetAngle) {
+        Serial.print("new target:");
+        Serial.println(tgt);
+        target = down;
+        state = falling;
+        downTargetAngle = tgt;
+    }
+}
 
+uint8_t getPower(double angle, double start, double end) {
+    double diff = min(abs(angle - start), abs(angle - end));
 
+    if (diff > 7.0) {
+        return 128;
+    }
+    return map(diff * 100, 0, 700, 78, 128);
+}
+
+void receive(){
     if (remote_rx_manchester.receiveComplete()) {
 
         if (rx_buf[0] != sizeof(remote_msg_t) + 1) {
             /* ignore */
-            return;
+            goto b_rx;
+        }
+
+        if(state != target){
+            /* ignore input, we are working :) */
+            goto b_rx;
         }
 
         memcpy(&remote_msg, rx_buf + 1, sizeof(remote_msg_t));
@@ -118,41 +149,46 @@ void loop() {
 
 //        transmit(); TODO enable when adding lights back
 
+        b_rx:
         remote_rx_manchester.beginReceiveArray(sizeof(remote_msg_t) + 1, rx_buf);
     }
+}
+
+void loop() {
+
+    readTargetPot();
+
+    receive();
 
     getAngle(&angleX, &angleY, &angleZ);
 
     if (state == target) {
-        digitalWrite(3, HIGH); // brake ??
-        digitalWrite(4, LOW);
         digitalWrite(5, LOW);
+        digitalWrite(6, LOW);
+
+        digitalWrite(11, LOW);
+        digitalWrite(12, HIGH);
+
     } else {
+        digitalWrite(11, HIGH);
+        digitalWrite(12, LOW);
 
         switch (target) {
             case up:
-                digitalWrite(3, HIGH);
-                digitalWrite(4, HIGH);
-                digitalWrite(5, LOW);
+                analogWrite(5, getPower(angleY, downTargetAngle, 135));
+                digitalWrite(6, LOW);
                 state = rising;
-                if(angleY > 135){
+                if (angleY > 135) {
                     Serial.println("Bridge is up");
                     state = up;
                 }
 
                 break;
             case down:
-
-                if(angleY < 92){
-                    analogWrite(5, 192);
-                }else{
-                    digitalWrite(5, HIGH);
-                }
-                digitalWrite(3, HIGH);
-                digitalWrite(4, LOW);
-//                digitalWrite(5, HIGH);
+                digitalWrite(5, LOW);
+                analogWrite(6, getPower(angleY, 135, downTargetAngle));
                 state = falling;
-                if(angleY < 89){
+                if (angleY < downTargetAngle) {
                     Serial.println("Bridge is down");
                     state = down;
                 }
