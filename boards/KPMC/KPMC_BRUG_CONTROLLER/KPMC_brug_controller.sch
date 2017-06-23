@@ -1,0 +1,403 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:arduino
+LIBS:KPMC_brug_controller-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L ARDUINO_NANO ARDUINO1
+U 1 1 594B83EB
+P 5200 4000
+F 0 "ARDUINO1" H 5200 4850 70  0000 C CNN
+F 1 "ARDUINO_NANO" V 5200 4000 70  0000 C CNN
+F 2 "arduino_nano:Arduino_nano" H 5200 4000 60  0001 C CNN
+F 3 "" H 5200 4000 60  0000 C CNN
+	1    5200 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X08 P2
+U 1 1 594B93B8
+P 8000 2300
+F 0 "P2" H 8000 2750 50  0000 C CNN
+F 1 "CONN_01X08" V 8100 2300 50  0000 C CNN
+F 2 "Connectors_Molex:Molex_SPOX-5267_22-03-5085_08x2.54mm_Straight" H 8000 2300 50  0001 C CNN
+F 3 "" H 8000 2300 50  0000 C CNN
+	1    8000 2300
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X04 P1
+U 1 1 594B9576
+P 7950 3500
+F 0 "P1" H 7950 3750 50  0000 C CNN
+F 1 "CONN_01X04" V 8050 3500 50  0000 C CNN
+F 2 "Connectors_Molex:Molex_SPOX-5267_22-03-5045_04x2.54mm_Straight" H 7950 3500 50  0001 C CNN
+F 3 "" H 7950 3500 50  0000 C CNN
+	1    7950 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L LM7805CT U1
+U 1 1 594B9644
+P 2200 1500
+F 0 "U1" H 2000 1700 50  0000 C CNN
+F 1 "LM7805CT" H 2200 1700 50  0000 L CNN
+F 2 "Power_Integrations:TO-220" H 2200 1600 50  0000 C CIN
+F 3 "" H 2200 1500 50  0000 C CNN
+	1    2200 1500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Screw_Terminal_1x02 J1
+U 1 1 594B969D
+P 750 1550
+F 0 "J1" H 750 1800 50  0000 C TNN
+F 1 "Screw_Terminal_1x02" V 600 1550 50  0000 C TNN
+F 2 "" H 750 1325 50  0001 C CNN
+F 3 "" H 725 1550 50  0001 C CNN
+	1    750  1550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Screw_Terminal_1x02 J2
+U 1 1 594B9763
+P 750 2400
+F 0 "J2" H 750 2650 50  0000 C TNN
+F 1 "Screw_Terminal_1x02" V 600 2400 50  0000 C TNN
+F 2 "" H 750 2175 50  0001 C CNN
+F 3 "" H 725 2400 50  0001 C CNN
+	1    750  2400
+	1    0    0    -1  
+$EndComp
+$Comp
+L CP C1
+U 1 1 594B9771
+P 1350 1600
+F 0 "C1" H 1375 1700 50  0000 L CNN
+F 1 "1000uF" H 1375 1500 50  0000 L CNN
+F 2 "" H 1388 1450 50  0001 C CNN
+F 3 "" H 1350 1600 50  0000 C CNN
+	1    1350 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L CP C3
+U 1 1 594B97D5
+P 2900 1600
+F 0 "C3" H 2925 1700 50  0000 L CNN
+F 1 "100uF" H 2925 1500 50  0000 L CNN
+F 2 "" H 2938 1450 50  0001 C CNN
+F 3 "" H 2900 1600 50  0000 C CNN
+	1    2900 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L CP C5
+U 1 1 594B982B
+P 4650 2800
+F 0 "C5" H 4675 2900 50  0000 L CNN
+F 1 "CP" H 4675 2700 50  0000 L CNN
+F 2 "" H 4688 2650 50  0001 C CNN
+F 3 "" H 4650 2800 50  0000 C CNN
+	1    4650 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C2
+U 1 1 594B9899
+P 1650 1600
+F 0 "C2" H 1675 1700 50  0000 L CNN
+F 1 "100nf" H 1675 1500 50  0000 L CNN
+F 2 "" H 1688 1450 50  0001 C CNN
+F 3 "" H 1650 1600 50  0000 C CNN
+	1    1650 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C4
+U 1 1 594B9916
+P 3200 1600
+F 0 "C4" H 3225 1700 50  0000 L CNN
+F 1 "100nF" H 3225 1500 50  0000 L CNN
+F 2 "" H 3238 1450 50  0001 C CNN
+F 3 "" H 3200 1600 50  0000 C CNN
+	1    3200 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C6
+U 1 1 594B9971
+P 4950 2800
+F 0 "C6" H 4975 2900 50  0000 L CNN
+F 1 "100nF" H 4975 2700 50  0000 L CNN
+F 2 "" H 4988 2650 50  0001 C CNN
+F 3 "" H 4950 2800 50  0000 C CNN
+	1    4950 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L POT_TRIM RV1
+U 1 1 594B9B3F
+P 2250 3550
+F 0 "RV1" V 2075 3550 50  0000 C CNN
+F 1 "POT_TRIM" V 2150 3550 50  0000 C CNN
+F 2 "" H 2250 3550 50  0001 C CNN
+F 3 "" H 2250 3550 50  0000 C CNN
+	1    2250 3550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	950  1450 1800 1450
+Connection ~ 1650 1450
+Connection ~ 1350 1450
+Wire Wire Line
+	950  1650 950  1950
+Wire Wire Line
+	950  1950 3450 1950
+Wire Wire Line
+	1350 1750 1350 2800
+Connection ~ 1350 1950
+Wire Wire Line
+	1650 1750 1650 1950
+Connection ~ 1650 1950
+Wire Wire Line
+	2200 1750 2200 1950
+Connection ~ 2200 1950
+Wire Wire Line
+	2600 1450 6100 1450
+Connection ~ 2900 1450
+Wire Wire Line
+	3200 1750 3200 1950
+Connection ~ 3200 1950
+Wire Wire Line
+	2900 1750 2900 1950
+Connection ~ 2900 1950
+Wire Wire Line
+	1350 2500 950  2500
+Wire Wire Line
+	1100 700  1100 2300
+Wire Wire Line
+	1100 2300 950  2300
+Connection ~ 1100 1450
+$Comp
+L LED D2
+U 1 1 594BA029
+P 1500 3900
+F 0 "D2" H 1500 4000 50  0000 C CNN
+F 1 "LED" H 1500 3800 50  0000 C CNN
+F 2 "" H 1500 3900 50  0001 C CNN
+F 3 "" H 1500 3900 50  0000 C CNN
+	1    1500 3900
+	0    -1   -1   0   
+$EndComp
+$Comp
+L LED D1
+U 1 1 594BA1DA
+P 1100 3900
+F 0 "D1" H 1100 4000 50  0000 C CNN
+F 1 "LED" H 1100 3800 50  0000 C CNN
+F 2 "" H 1100 3900 50  0001 C CNN
+F 3 "" H 1100 3900 50  0000 C CNN
+	1    1100 3900
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R1
+U 1 1 594BA236
+P 1100 3450
+F 0 "R1" V 1180 3450 50  0000 C CNN
+F 1 "180" V 1100 3450 50  0000 C CNN
+F 2 "" V 1030 3450 50  0001 C CNN
+F 3 "" H 1100 3450 50  0000 C CNN
+	1    1100 3450
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R2
+U 1 1 594BA3A8
+P 1500 3450
+F 0 "R2" V 1580 3450 50  0000 C CNN
+F 1 "180" V 1500 3450 50  0000 C CNN
+F 2 "" V 1430 3450 50  0001 C CNN
+F 3 "" H 1500 3450 50  0000 C CNN
+	1    1500 3450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2250 3700 2250 4200
+Wire Wire Line
+	850  4200 2900 4200
+Wire Wire Line
+	850  4200 850  2800
+Wire Wire Line
+	850  2800 1350 2800
+Connection ~ 1350 2500
+Wire Wire Line
+	1100 4050 1100 4200
+Connection ~ 1100 4200
+Wire Wire Line
+	1500 4050 1500 4200
+Connection ~ 1500 4200
+Wire Wire Line
+	1100 3600 1100 3750
+Wire Wire Line
+	1500 3600 1500 3750
+Wire Wire Line
+	1100 3200 1100 3300
+Wire Wire Line
+	1500 3300 1500 3200
+$Comp
+L C C7
+U 1 1 594BA6FE
+P 2900 3850
+F 0 "C7" H 2925 3950 50  0000 L CNN
+F 1 "1uF" H 2925 3750 50  0000 L CNN
+F 2 "" H 2938 3700 50  0001 C CNN
+F 3 "" H 2900 3850 50  0000 C CNN
+	1    2900 3850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2900 4200 2900 4000
+Connection ~ 2250 4200
+Wire Wire Line
+	2250 3200 2900 3200
+Wire Wire Line
+	2400 3550 2900 3550
+Connection ~ 2900 3550
+Wire Wire Line
+	2900 3550 2900 3700
+Wire Wire Line
+	2250 3400 2250 3200
+Wire Wire Line
+	5800 3250 6100 3250
+Wire Wire Line
+	6100 3250 6100 1450
+Connection ~ 3200 1450
+$Comp
+L LM7805CT U?
+U 1 1 594C1D17
+P 2200 750
+F 0 "U?" H 2000 950 50  0000 C CNN
+F 1 "LM7805CT" H 2200 950 50  0000 L CNN
+F 2 "Power_Integrations:TO-220" H 2200 850 50  0000 C CIN
+F 3 "" H 2200 750 50  0000 C CNN
+	1    2200 750 
+	1    0    0    -1  
+$EndComp
+$Comp
+L CP C?
+U 1 1 594C1D1D
+P 1350 850
+F 0 "C?" H 1375 950 50  0000 L CNN
+F 1 "1000uF" H 1375 750 50  0000 L CNN
+F 2 "" H 1388 700 50  0001 C CNN
+F 3 "" H 1350 850 50  0000 C CNN
+	1    1350 850 
+	1    0    0    -1  
+$EndComp
+$Comp
+L CP C?
+U 1 1 594C1D23
+P 2900 850
+F 0 "C?" H 2925 950 50  0000 L CNN
+F 1 "100uF" H 2925 750 50  0000 L CNN
+F 2 "" H 2938 700 50  0001 C CNN
+F 3 "" H 2900 850 50  0000 C CNN
+	1    2900 850 
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C?
+U 1 1 594C1D29
+P 1650 850
+F 0 "C?" H 1675 950 50  0000 L CNN
+F 1 "100nf" H 1675 750 50  0000 L CNN
+F 2 "" H 1688 700 50  0001 C CNN
+F 3 "" H 1650 850 50  0000 C CNN
+	1    1650 850 
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C?
+U 1 1 594C1D2F
+P 3200 850
+F 0 "C?" H 3225 950 50  0000 L CNN
+F 1 "100nF" H 3225 750 50  0000 L CNN
+F 2 "" H 3238 700 50  0001 C CNN
+F 3 "" H 3200 850 50  0000 C CNN
+	1    3200 850 
+	1    0    0    -1  
+$EndComp
+Connection ~ 1650 700 
+Connection ~ 1350 700 
+Wire Wire Line
+	1350 1000 1350 2050
+Connection ~ 1350 1200
+Wire Wire Line
+	1650 1000 1650 1200
+Connection ~ 1650 1200
+Wire Wire Line
+	2200 1000 2200 1200
+Connection ~ 2200 1200
+Wire Wire Line
+	2600 700  6100 700 
+Connection ~ 2900 700 
+Wire Wire Line
+	3200 1200 3200 1000
+Connection ~ 3200 1200
+Wire Wire Line
+	2900 1000 2900 1200
+Connection ~ 2900 1200
+Connection ~ 3200 700 
+Connection ~ 1100 700 
+Wire Wire Line
+	1200 1950 1200 1200
+Wire Wire Line
+	1200 1200 3200 1200
+Connection ~ 1250 1200
+Connection ~ 1200 1950
+Wire Wire Line
+	1100 700  1800 700 
+$EndSCHEMATC
