@@ -25,14 +25,14 @@ set(ARDUINO_SOURCE_FILES
         ${ATTINY_CORE_PATH}/avr/cores/tiny/wiring_digital.c
         )
 
-include_directories(../manchester)
+include_directories(../lib/manchester)
 include_directories(../protocol)
 
 set(SOURCE_FILES
         ${ARDUINO_SOURCE_FILES}
 
-        ../manchester/Manchester.h
-        ../manchester/Manchester.cpp
+        ../lib/manchester/Manchester.h
+        ../lib/manchester/Manchester.cpp
 
         main.cpp
         )
