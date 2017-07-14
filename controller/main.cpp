@@ -2,7 +2,6 @@
 #include <BridgeKeeper.h>
 #include <MPU6050.h>
 #include "Manchester.h"
-#include "pwmutil.h"
 
 Manchester pole1_manchester;
 Manchester remote_rx_manchester;
@@ -11,10 +10,18 @@ MPU6050 accelgyro;
 
 double angleX, angleY, angleZ;
 
-double downTargetAngle;
+double downTargetAngle = 90;
 
-#define TX_PIN 5
-#define RX_PIN 8
+#define MOTOR_ENABLE 3
+#define MOTOR_FWD 5
+#define MOTOR_BACK 6
+
+#define NAV_L_1_PIN 7
+#define NAV_L_2_PIN 9
+#define RF_DATA_PIN 8
+
+#define LED1_PIN 12
+#define LED2_PIN 13
 
 lightpole_msg_t pole1;
 remote_msg_t remote_msg;
@@ -28,15 +35,15 @@ State state;
 State target;
 
 void setup() {
-    pinMode(A0, INPUT);
 
-    pinMode(5, OUTPUT);
-    pinMode(6, OUTPUT);
+    pinMode(MOTOR_ENABLE, OUTPUT);
+    pinMode(MOTOR_FWD, OUTPUT);
+    pinMode(MOTOR_BACK, OUTPUT);
 
-    pinMode(11, OUTPUT);
-    pinMode(12, OUTPUT);
-    pinMode(13, OUTPUT);
-    pinMode(TX_PIN, OUTPUT);
+    pinMode(LED1_PIN, OUTPUT);
+    pinMode(LED2_PIN, OUTPUT);
+    pinMode(NAV_L_1_PIN, OUTPUT);
+    pinMode(NAV_L_2_PIN, OUTPUT);
 
     Serial.begin(38400);
     Serial.print("Initializing...");
@@ -55,11 +62,11 @@ void setup() {
     target = down;
 
     Serial.println("Initializing remote manchester...");
-    remote_rx_manchester.setupReceive(RX_PIN, MAN_300);
+    remote_rx_manchester.setupReceive(RF_DATA_PIN, MAN_300);
     remote_rx_manchester.beginReceiveArray(sizeof(remote_msg_t) + 1, rx_buf);
 
     Serial.println("Initializing pole1 manchester...");
-    pole1_manchester.setupTransmit(TX_PIN, MAN_300);
+    pole1_manchester.setupTransmit(NAV_L_1_PIN, MAN_300);
 
     Serial.println("Initialized.");
 }
@@ -71,9 +78,9 @@ void transmit() {
     memcpy(buf + 1, &pole1, sizeof(lightpole_msg_t));
     pole1_manchester.transmitArray(sizeof(lightpole_msg_t) + 1, buf);
 
-    digitalWrite(13, HIGH);
-    delay(100);
-    digitalWrite(13, LOW);
+//    digitalWrite(13, HIGH);
+//    delay(100);
+//    digitalWrite(13, LOW);
 }
 
 void getAngle(double *xTgt, double *yTgt, double *zTgt) {
@@ -100,16 +107,16 @@ void getAngle(double *xTgt, double *yTgt, double *zTgt) {
 }
 
 void readTargetPot() {
-    double tgt = map(analogRead(A0), 0, 1023, 850, 950);
-    tgt /= 10.0;
-
-    if (tgt != downTargetAngle) {
-        Serial.print("new target:");
-        Serial.println(tgt);
-        target = down;
-        state = falling;
-        downTargetAngle = tgt;
-    }
+//    double tgt = map(analogRead(A0), 0, 1023, 850, 950);
+//    tgt /= 10.0;
+//
+//    if (tgt != downTargetAngle) {
+//        Serial.print("new target:");
+//        Serial.println(tgt);
+//        target = down;
+//        state = falling;
+//        downTargetAngle = tgt;
+//    }
 }
 
 uint8_t getPower(double angle, double start, double end) {
@@ -163,20 +170,22 @@ void loop() {
     getAngle(&angleX, &angleY, &angleZ);
 
     if (state == target) {
-        digitalWrite(5, LOW);
-        digitalWrite(6, LOW);
+        digitalWrite(MOTOR_ENABLE, LOW);
+        digitalWrite(MOTOR_FWD, LOW);
+        digitalWrite(MOTOR_BACK, LOW);
 
-        digitalWrite(11, LOW);
-        digitalWrite(12, HIGH);
+        digitalWrite(LED1_PIN, LOW);
+        digitalWrite(LED2_PIN, HIGH);
 
     } else {
-        digitalWrite(11, HIGH);
-        digitalWrite(12, LOW);
+        digitalWrite(LED1_PIN, HIGH);
+        digitalWrite(LED2_PIN, LOW);
 
         switch (target) {
             case up:
-                analogWrite(5, getPower(angleY, downTargetAngle, 135));
-                digitalWrite(6, LOW);
+                analogWrite(MOTOR_ENABLE, getPower(angleY, downTargetAngle, 135));
+                digitalWrite(MOTOR_FWD, HIGH);
+                digitalWrite(MOTOR_BACK, LOW);
                 state = rising;
                 if (angleY > 135) {
                     Serial.println("Bridge is up");
@@ -185,8 +194,9 @@ void loop() {
 
                 break;
             case down:
-                digitalWrite(5, LOW);
-                analogWrite(6, getPower(angleY, 135, downTargetAngle));
+                analogWrite(MOTOR_ENABLE, getPower(angleY, 135, downTargetAngle));
+                digitalWrite(MOTOR_FWD, LOW);
+                digitalWrite(MOTOR_BACK, HIGH);
                 state = falling;
                 if (angleY < downTargetAngle) {
                     Serial.println("Bridge is down");
@@ -206,5 +216,9 @@ int main() {
 
     while (true) {
         loop();
+        Serial.print("angle: ");
+        Serial.print(angleY);
+        Serial.println();
+        delay(500);
     }
 }
