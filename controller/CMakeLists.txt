@@ -36,19 +36,29 @@ set(ARDUINO_SOURCE_FILES
 
         )
 
-include_directories(../manchester)
+include_directories(../lib/manchester)
 include_directories(../protocol)
-include_directories(../MPU6050)
-include_directories(../I2Cdev)
+include_directories(../lib/MPU6050)
+include_directories(../lib/I2Cdev)
+include_directories(../lib/LiquidCrystal)
 #
 set(SOURCE_FILES
         ${ARDUINO_SOURCE_FILES}
 
-        ../manchester/Manchester.h
-        ../manchester/Manchester.cpp
+        ../lib/manchester/Manchester.h
+        ../lib/manchester/Manchester.cpp
 
-        ../I2Cdev/I2Cdev.cpp
-        ../MPU6050/MPU6050.cpp
+        ../lib/I2Cdev/I2Cdev.cpp
+        ../lib/MPU6050/MPU6050.cpp
+
+        ../lib/LiquidCrystal/LiquidCrystal_I2C.h
+        ../lib/LiquidCrystal/LiquidCrystal_I2C.cpp
+
+        ../lib/LiquidCrystal/LCD.h
+        ../lib/LiquidCrystal/LCD.cpp
+
+        ../lib/LiquidCrystal/I2CIO.h
+        ../lib/LiquidCrystal/I2CIO.cpp
 
         main.cpp
 
