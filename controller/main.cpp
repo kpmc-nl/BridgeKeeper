@@ -183,7 +183,8 @@ void loop() {
 
         switch (target) {
             case up:
-                analogWrite(MOTOR_ENABLE, getPower(angleY, downTargetAngle, 135));
+//                analogWrite(MOTOR_FWD, getPower(angleY, downTargetAngle, 135));
+              //  analogWrite(MOTOR_ENABLE, getPower(angleY, downTargetAngle, 135));
                 digitalWrite(MOTOR_FWD, HIGH);
                 digitalWrite(MOTOR_BACK, LOW);
                 state = rising;
@@ -194,7 +195,8 @@ void loop() {
 
                 break;
             case down:
-                analogWrite(MOTOR_ENABLE, getPower(angleY, 135, downTargetAngle));
+//                analogWrite(MOTOR_ENABLE, getPower(angleY, 135, downTargetAngle));
+//                analogWrite(MOTOR_BACK, getPower(angleY, 135, downTargetAngle));
                 digitalWrite(MOTOR_FWD, LOW);
                 digitalWrite(MOTOR_BACK, HIGH);
                 state = falling;
