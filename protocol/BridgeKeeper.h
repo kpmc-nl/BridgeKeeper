@@ -1,6 +1,8 @@
 #ifndef BRIDGEKEEPER_H
 #define BRIDGEKEEPER_H
 
+#include <stdio.h>
+
 #define HIGH 0x1
 #define LOW  0x0
 

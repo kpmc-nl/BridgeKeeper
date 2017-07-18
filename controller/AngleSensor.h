@@ -13,7 +13,7 @@ private:
 public:
     AngleSensor();
 
-    void init();
+    void setup();
 
     void update();
 

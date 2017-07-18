@@ -6,7 +6,7 @@ AngleSensor::AngleSensor() {
     accelgyro = MPU6050(MPU6050_ADDRESS);
 }
 
-void AngleSensor::init() {
+void AngleSensor::setup() {
     accelgyro.setDLPFMode(6);
     accelgyro.initialize();
 }

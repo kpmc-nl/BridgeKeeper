@@ -15,7 +15,7 @@ public:
 
     UI();
 
-    void init();
+    void setup();
 
     void update();
 

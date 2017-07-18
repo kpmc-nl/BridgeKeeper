@@ -7,7 +7,7 @@ int main() {
 
     Controller *controller = Controller::getInstance();
 
-    controller->init();
+    controller->setup();
 
     while (true) {
         controller->update();

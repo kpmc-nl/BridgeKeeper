@@ -61,7 +61,9 @@ set(SOURCE_FILES
         ../lib/LiquidCrystal/I2CIO.cpp
 
         Controller.h Controller.cpp
+        State.h Pinout.h
         AngleSensor.h AngleSensor.cpp
+        Receiver.h Receiver.cpp
         UI.h UI.cpp
 
         main.cpp

@@ -4,12 +4,16 @@
 
 #include "UI.h"
 #include "AngleSensor.h"
+#include "State.h"
+#include "Receiver.h"
 
 class Controller {
 
 private:
     UI ui;
-    AngleSensor angleSensor;
+    AngleSensor angle_sensor;
+    Receiver receiver;
+    State target_state;
 
 public:
 
@@ -17,9 +21,13 @@ public:
 
     static Controller *getInstance();
 
-    void init();
+    void setup();
 
     void update();
+
+    State getTargetState();
+
+    void setTargetState(State state);
 
     UI *getUi();
 
