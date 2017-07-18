@@ -60,6 +60,10 @@ set(SOURCE_FILES
         ../lib/LiquidCrystal/I2CIO.h
         ../lib/LiquidCrystal/I2CIO.cpp
 
+        Controller.h Controller.cpp
+        AngleSensor.h AngleSensor.cpp
+        UI.h UI.cpp
+
         main.cpp
 
         )
