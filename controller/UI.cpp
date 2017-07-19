@@ -26,11 +26,28 @@ void UI::update() {
 
         lcd->setCursor(0, 0);
         lcd->print("c:");
-        lcd->print(controller->getAngleSensor()->getAngle());
+        lcd->print(controller->getAngleSensor()->getAngle(), 1);
 
+        lcd->setCursor(7,0);
         lcd->print(" t:");
 
         switch (controller->getTargetState()) {
+
+            case Up_L:
+                lcd->print("UL");
+                break;
+            case Up_R:
+                lcd->print("UR");
+                break;
+            case Down:
+                lcd->print("DO");
+                break;
+        }
+
+        lcd->setCursor(0, 1);
+        lcd->print("s:");
+
+        switch (controller->getCurrentState()) {
 
             case Up_L:
                 lcd->print("UL");
@@ -48,7 +65,6 @@ void UI::update() {
                 lcd->print("FA");
                 break;
         }
-
 
         last_display = millis();
     }
