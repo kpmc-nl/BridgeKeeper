@@ -14,6 +14,7 @@ private:
     AngleSensor angle_sensor;
     Receiver receiver;
     State target_state;
+    State current_state;
 
 public:
 
@@ -26,6 +27,8 @@ public:
     void update();
 
     State getTargetState();
+
+    State getCurrentState();
 
     void setTargetState(State state);
 

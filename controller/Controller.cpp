@@ -5,8 +5,9 @@ static Controller instance;
 Controller::Controller() {
     ui = UI();
     angle_sensor = AngleSensor();
-    
+
     target_state = Down;
+    current_state = Falling;
 }
 
 Controller *Controller::getInstance() {
@@ -14,9 +15,9 @@ Controller *Controller::getInstance() {
 }
 
 void Controller::setup() {
-    ui.setup();
     receiver.setup();
     angle_sensor.setup();
+    ui.setup();
 }
 
 void Controller::update() {
@@ -29,6 +30,10 @@ void Controller::update() {
 
 State Controller::getTargetState() {
     return target_state;
+}
+
+State Controller::getCurrentState() {
+    return current_state;
 }
 
 void Controller::setTargetState(State state) {

@@ -4,6 +4,7 @@
 
 AngleSensor::AngleSensor() {
     accelgyro = MPU6050(MPU6050_ADDRESS);
+    angle = 90.0;
 }
 
 void AngleSensor::setup() {

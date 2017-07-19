@@ -8,6 +8,12 @@ UI::UI() {
 
 void UI::setup() {
     lcd->begin(16, 2);
+
+    lcd->setCursor(0,0);
+    lcd->print("==BridgeKeeper==");
+
+    delay(1000);
+    lcd->clear();
 }
 
 void UI::update() {

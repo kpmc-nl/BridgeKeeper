@@ -63,6 +63,7 @@ set(SOURCE_FILES
         Controller.h Controller.cpp
         State.h Pinout.h
         AngleSensor.h AngleSensor.cpp
+        BridgeActuator.h BridgeActuator.cpp
         Receiver.h Receiver.cpp
         UI.h UI.cpp
 
