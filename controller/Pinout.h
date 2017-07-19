@@ -3,9 +3,9 @@
 #define BRIDGEKEEPER_PINOUT_H
 
 
-#define MOTOR_ENABLE 3
-#define MOTOR_FWD 5
-#define MOTOR_BACK 6
+#define MOTOR_ENABLE 6
+#define MOTOR_FWD 3
+#define MOTOR_BACK 5
 
 #define NAV_L_1_PIN 7
 #define NAV_L_2_PIN 9

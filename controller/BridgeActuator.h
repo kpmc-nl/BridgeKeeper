@@ -5,16 +5,25 @@
 #ifndef BRIDGEKEEPER_BRIDGEACTUATOR_H
 #define BRIDGEKEEPER_BRIDGEACTUATOR_H
 
+#include <stdio.h>
 
 class BridgeActuator {
 
 
 
 public:
-    void init();
+    void setup();
 
     void update();
 
+private:
+    void rise();
+
+    void fall();
+
+    void stay();
+
+    uint8_t getPower();
 
 };
 

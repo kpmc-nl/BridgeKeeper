@@ -1,13 +1,9 @@
-//
-// Created by matthijs on 7/19/17.
-//
-
 #include "BridgeActuator.h"
 #include "Controller.h"
 #include "Pinout.h"
 
 
-void BridgeActuator::init() {
+void BridgeActuator::setup() {
 
     pinMode(MOTOR_ENABLE, OUTPUT);
     pinMode(MOTOR_FWD, OUTPUT);
@@ -23,43 +19,55 @@ void BridgeActuator::update() {
     State cur = controller->getCurrentState();
 
     if (cur == tgt) {
-        digitalWrite(MOTOR_ENABLE, LOW);
-        digitalWrite(MOTOR_FWD, LOW);
-        digitalWrite(MOTOR_BACK, LOW);
-
+        stay();
         digitalWrite(LED1_PIN, LOW);
         digitalWrite(LED2_PIN, HIGH);
-
     } else {
         digitalWrite(LED1_PIN, HIGH);
         digitalWrite(LED2_PIN, LOW);
 
         switch (tgt) {
-            case up:
-//                analogWrite(MOTOR_FWD, getPower(angleY, downTargetAngle, 135));
-                //  analogWrite(MOTOR_ENABLE, getPower(angleY, downTargetAngle, 135));
-                digitalWrite(MOTOR_FWD, HIGH);
-                digitalWrite(MOTOR_BACK, LOW);
-                state = rising;
-                if (angleY > 135) {
-                    Serial.println("Bridge is up");
-                    state = up;
-                }
-
+            case Up_L:
+            case Up_R:
+                rise();
                 break;
-            case down:
-//                analogWrite(MOTOR_ENABLE, getPower(angleY, 135, downTargetAngle));
-//                analogWrite(MOTOR_BACK, getPower(angleY, 135, downTargetAngle));
-                digitalWrite(MOTOR_FWD, LOW);
-                digitalWrite(MOTOR_BACK, HIGH);
-                state = falling;
-                if (angleY < downTargetAngle) {
-                    Serial.println("Bridge is down");
-                    state = down;
-                }
-
+            case Down:
+                fall();
                 break;
         }
-
-
     }
+}
+
+void BridgeActuator::stay() {
+    analogWrite(MOTOR_ENABLE, 0);
+    digitalWrite(MOTOR_FWD, LOW);
+    digitalWrite(MOTOR_BACK, LOW);
+}
+
+void BridgeActuator::rise() {
+    analogWrite(MOTOR_ENABLE, getPower());
+    digitalWrite(MOTOR_FWD, HIGH);
+    digitalWrite(MOTOR_BACK, LOW);
+    Controller::getInstance()->setCurrentState(Rising);
+}
+
+void BridgeActuator::fall() {
+    analogWrite(MOTOR_ENABLE, getPower());
+    digitalWrite(MOTOR_FWD, LOW);
+    digitalWrite(MOTOR_BACK, HIGH);
+    Controller::getInstance()->setCurrentState(Falling);
+}
+
+uint8_t BridgeActuator::getPower() {
+    Controller *controller = Controller::getInstance();
+    double angle = controller->getAngleSensor()->getAngle();
+    double down = controller->getDownTargetAngle();
+    double up = controller->getUpTargetAngle();
+
+    double diff = min(abs(angle - down), abs(angle - up));
+
+    if(diff > 7.0){
+        return 128;
+    }
+    return map(diff * 100, 0, 700, 78, 128);
+}
