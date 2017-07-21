@@ -60,7 +60,7 @@ double Controller::getDownTargetAngle() {
 }
 
 double Controller::getUpTargetAngle() {
-    return 135;
+    return 150;
 }
 
 void Controller::setTargetState(State state) {

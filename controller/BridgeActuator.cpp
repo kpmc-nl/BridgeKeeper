@@ -45,16 +45,16 @@ void BridgeActuator::stay() {
 }
 
 void BridgeActuator::rise() {
-    analogWrite(MOTOR_ENABLE, getPower());
-    digitalWrite(MOTOR_FWD, HIGH);
+    digitalWrite(MOTOR_ENABLE, HIGH);
+    analogWrite(MOTOR_FWD, getPower());
     digitalWrite(MOTOR_BACK, LOW);
     Controller::getInstance()->setCurrentState(Rising);
 }
 
 void BridgeActuator::fall() {
-    analogWrite(MOTOR_ENABLE, getPower());
+    digitalWrite(MOTOR_ENABLE, HIGH);
     digitalWrite(MOTOR_FWD, LOW);
-    digitalWrite(MOTOR_BACK, HIGH);
+    analogWrite(MOTOR_BACK, getPower());
     Controller::getInstance()->setCurrentState(Falling);
 }
 
