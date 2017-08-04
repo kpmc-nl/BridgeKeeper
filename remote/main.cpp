@@ -21,9 +21,9 @@ void setup() {
 
 
     pinMode(PIN_B2, OUTPUT);
-    pinMode(BTN1_PIN, INPUT_PULLUP);
-    pinMode(BTN2_PIN, INPUT_PULLUP);
-    pinMode(BTN3_PIN, INPUT_PULLUP);
+    pinMode(BTN1_PIN, INPUT);
+    pinMode(BTN2_PIN, INPUT);
+    pinMode(BTN3_PIN, INPUT);
 
     pinMode(TX_PIN, OUTPUT);
 
@@ -36,15 +36,15 @@ void transmit() {
     memcpy(tx_buf + 1, &msg, sizeof(remote_msg_t));
     pole1_manchester.transmitArray(sizeof(remote_msg_t) + 1, tx_buf);
 
-    digitalWrite(PIN_B2, HIGH);
-    delay(100);
-    digitalWrite(PIN_B2, LOW);
+//    digitalWrite(PIN_B2, HIGH);
+//    delay(100);
+//    digitalWrite(PIN_B2, LOW);
 }
 
 
 void readBtn(uint8_t pin, uint8_t *target) {
-    if (!digitalRead(pin)) {
-        while (!digitalRead(pin)) {
+    if (digitalRead(pin)) {
+        while (digitalRead(pin)) {
             /* somewhat crude busy wait debounce ;) */
         }
         *target = HIGH;
