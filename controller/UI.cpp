@@ -18,7 +18,7 @@ void UI::setup() {
 
 void UI::update() {
 
-    if (last_display + DISPLAY_REFRESH_MS < millis()) {
+//    if (last_display + DISPLAY_REFRESH_MS < millis()) {
 
         Controller *controller = Controller::getInstance();
 
@@ -66,7 +66,7 @@ void UI::update() {
                 break;
         }
 
-        last_display = millis();
-    }
+//        last_display = millis();
+//    }
 }
 

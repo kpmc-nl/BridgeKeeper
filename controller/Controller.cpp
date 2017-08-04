@@ -15,27 +15,47 @@ Controller *Controller::getInstance() {
     return &instance;
 }
 
+void blink(int count) {
+    for (int i = 0; i < count; i++) {
+        digitalWrite(12, HIGH);
+        delay(100);
+        digitalWrite(12, LOW);
+        delay(100);
+    }
+//    delay(1000);
+}
+
+
 void Controller::setup() {
+//    blink(1);
     receiver.setup();
+//    blink(2);
     angle_sensor.setup();
+//    blink(3);
     bridge_actuator.setup();
+//    blink(4);
     ui.setup();
+//    blink(5);
 }
 
 void Controller::update() {
     angle_sensor.update();
+
+//    blink(4);
+//delay(1000);
+
     receiver.update();
 
-    switch (target_state){
+    switch (target_state) {
         case Up_L:
         case Up_R:
-            if(angle_sensor.getAngle() >= getUpTargetAngle()){
+            if (angle_sensor.getAngle() >= getUpTargetAngle()) {
                 current_state = target_state;
             }
             break;
 
         case Down:
-            if(angle_sensor.getAngle() <= getDownTargetAngle()){
+            if (angle_sensor.getAngle() <= getDownTargetAngle()) {
                 current_state = target_state;
             }
             break;
@@ -44,7 +64,15 @@ void Controller::update() {
     bridge_actuator.update();
 
     // always update ui the last
-    ui.update();
+
+    if (millis() % 100 == 0) {
+//        blink(1);
+
+//        cli();
+//        delay(100);
+        ui.update();
+//        sei();
+    }
 }
 
 State Controller::getTargetState() {
