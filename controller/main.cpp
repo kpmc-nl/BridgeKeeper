@@ -12,16 +12,6 @@ int main() {
 
     controller->setup();
 
-//    for(int i=0; i<10; i++){
-//        digitalWrite(12, HIGH);
-//        delay(150);
-//        digitalWrite(12, LOW);
-//        delay(150);
-//    }
-
-//    controller->update();
-//    delay(1000);
-
     while (true) {
         controller->update();
     }
