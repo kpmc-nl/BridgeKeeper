@@ -7,43 +7,59 @@
 #include "State.h"
 #include "Receiver.h"
 #include "BridgeActuator.h"
+#include "Button.h"
+#include "Pinout.h"
 
 class Controller {
 
+
 private:
-    UI ui;
-    AngleSensor angle_sensor;
-    Receiver receiver;
-    BridgeActuator bridge_actuator;
-    State target_state;
-    State current_state;
+    static UI ui;
+    static AngleSensor angle_sensor;
+    static Receiver receiver;
+    static BridgeActuator bridge_actuator;
+    static State target_state;
+    static State current_state;
+    static double up_target;
+    static double down_target;
+    static double manual_target;
+    static Button upButton;
+    static Button downButton;
 
 public:
 
-    Controller();
 
-    static Controller *getInstance();
+    static void setup();
 
-    void setup();
+    static void update();
 
-    void update();
+    static State getTargetState();
 
-    State getTargetState();
+    static State getCurrentState();
 
-    State getCurrentState();
+    static double getDownTargetAngle();
 
-    double getDownTargetAngle();
+    static double getUpTargetAngle();
 
-    double getUpTargetAngle();
+    static double getManualTargetAngle();
 
-    void setTargetState(State state);
+    static void setTargetState(State state);
 
-    void setCurrentState(State state);
+    static void setCurrentState(State state);
 
-    UI *getUi();
+    static UI *getUi();
 
-    AngleSensor *getAngleSensor();
+    static AngleSensor *getAngleSensor();
 
+    static void toManual();
+
+    static void targetUp();
+
+    static void targetDown();
+
+    static void confirmUpTarget();
+
+    static void confirmDownTarget();
 
 };
 

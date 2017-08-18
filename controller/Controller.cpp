@@ -1,24 +1,34 @@
 #include "Controller.h"
 
-static Controller instance;
+UI Controller::ui = UI();
+AngleSensor Controller::angle_sensor = AngleSensor();
+Receiver Controller::receiver = Receiver();
+BridgeActuator Controller::bridge_actuator = BridgeActuator();
+State Controller::target_state = Down;
+State Controller::current_state = Falling;
 
-Controller::Controller() {
-    ui = UI();
-    angle_sensor = AngleSensor();
-    bridge_actuator = BridgeActuator();
+double Controller::up_target = 150;
+double Controller::down_target = 90;
+double Controller::manual_target = 0;
 
-    target_state = Down;
-    current_state = Falling;
-}
+Button Controller::upButton = Button(BTN_UP_PIN,
+                                     Controller::targetUp,
+                                     Controller::confirmUpTarget);
 
-Controller *Controller::getInstance() {
-    return &instance;
-}
+Button Controller::downButton = Button(BTN_DOWN_PIN,
+                                       Controller::targetDown,
+                                       Controller::confirmDownTarget);
+
 
 void Controller::setup() {
+    pinMode(LED1_PIN, OUTPUT);
+    pinMode(LED2_PIN, OUTPUT);
+
     receiver.setup();
     angle_sensor.setup();
     bridge_actuator.setup();
+    upButton.setup();
+    downButton.setup();
     ui.setup();
 }
 
@@ -44,6 +54,8 @@ void Controller::update() {
 
     bridge_actuator.update();
 
+    upButton.update();
+    downButton.update();
 
     if (millis() % 100 == 0) {
         ui.update();
@@ -59,19 +71,23 @@ State Controller::getCurrentState() {
 }
 
 double Controller::getDownTargetAngle() {
-    return 90;
+    return down_target;
 }
 
 double Controller::getUpTargetAngle() {
-    return 150;
+    return up_target;
+}
+
+double Controller::getManualTargetAngle() {
+    return manual_target;
 }
 
 void Controller::setTargetState(State state) {
-    this->target_state = state;
+    target_state = state;
 }
 
 void Controller::setCurrentState(State state) {
-    this->current_state = state;
+    current_state = state;
 }
 
 UI *Controller::getUi() {
@@ -82,4 +98,38 @@ AngleSensor *Controller::getAngleSensor() {
     return &angle_sensor;
 }
 
+void Controller::toManual() {
+    if (Manual != current_state) {
+        current_state = Manual;
+        target_state = Manual;
+        manual_target = angle_sensor.getAngle();
+    }
+}
 
+void Controller::targetUp() {
+    toManual();
+    manual_target += 0.5;
+}
+
+void Controller::targetDown() {
+    toManual();
+    manual_target -=0.5;
+}
+
+void Controller::confirmUpTarget() {
+    if (current_state == Manual) {
+        up_target = manual_target;
+        current_state = Up_L;
+        target_state = Up_L;
+        manual_target = 0;
+    }
+}
+
+void Controller::confirmDownTarget() {
+    if (current_state == Manual) {
+        down_target = manual_target;
+        current_state = Down;
+        target_state = Down;
+        manual_target = 0;
+    }
+}

@@ -13,12 +13,30 @@ void BridgeActuator::setup() {
 
 void BridgeActuator::update() {
 
-    Controller *controller = Controller::getInstance();
 
-    State tgt = controller->getTargetState();
-    State cur = controller->getCurrentState();
+    State tgt = Controller::getTargetState();
+    State cur = Controller::getCurrentState();
 
-    if (cur == tgt) {
+
+    if (cur == Manual) {
+
+        double t = Controller::getManualTargetAngle();
+        double a = Controller::getAngleSensor()->getAngle();
+
+        if (abs(t - a) < 0.5) {
+            stay();
+        } else {
+            digitalWrite(MOTOR_ENABLE, HIGH);
+            if (t > a) {
+                analogWrite(MOTOR_FWD, 128);
+                digitalWrite(MOTOR_BACK, LOW);
+            } else {
+                digitalWrite(MOTOR_FWD, LOW);
+                analogWrite(MOTOR_BACK, 128);
+            }
+        }
+
+    } else if (cur == tgt) {
         stay();
         digitalWrite(LED1_PIN, LOW);
         digitalWrite(LED2_PIN, HIGH);
@@ -48,25 +66,24 @@ void BridgeActuator::rise() {
     digitalWrite(MOTOR_ENABLE, HIGH);
     analogWrite(MOTOR_FWD, getPower());
     digitalWrite(MOTOR_BACK, LOW);
-    Controller::getInstance()->setCurrentState(Rising);
+    Controller::setCurrentState(Rising);
 }
 
 void BridgeActuator::fall() {
     digitalWrite(MOTOR_ENABLE, HIGH);
     digitalWrite(MOTOR_FWD, LOW);
     analogWrite(MOTOR_BACK, getPower());
-    Controller::getInstance()->setCurrentState(Falling);
+    Controller::setCurrentState(Falling);
 }
 
 uint8_t BridgeActuator::getPower() {
-    Controller *controller = Controller::getInstance();
-    double angle = controller->getAngleSensor()->getAngle();
-    double down = controller->getDownTargetAngle();
-    double up = controller->getUpTargetAngle();
+    double angle = Controller::getAngleSensor()->getAngle();
+    double down = Controller::getDownTargetAngle();
+    double up = Controller::getUpTargetAngle();
 
     double diff = min(abs(angle - down), abs(angle - up));
 
-    if(diff > 7.0){
+    if (diff > 7.0) {
         return 128;
     }
     return map(diff * 100, 0, 700, 78, 128);

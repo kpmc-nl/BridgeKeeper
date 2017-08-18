@@ -66,6 +66,7 @@ set(SOURCE_FILES
         BridgeActuator.h BridgeActuator.cpp
         Receiver.h Receiver.cpp
         UI.h UI.cpp
+        Button.h Button.cpp
 
         main.cpp
 

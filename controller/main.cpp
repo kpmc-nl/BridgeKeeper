@@ -5,15 +5,13 @@
 int main() {
     init();
 
-    pinMode(12, OUTPUT);
-    pinMode(13, OUTPUT);
 
-    Controller *controller = Controller::getInstance();
 
-    controller->setup();
+
+    Controller::setup();
 
     while (true) {
-        controller->update();
+        Controller::update();
     }
 
 }
