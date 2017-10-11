@@ -25,6 +25,7 @@ private:
     static double manual_target;
     static Button upButton;
     static Button downButton;
+    static unsigned long last_intervention;
 
 public:
 
@@ -61,6 +62,7 @@ public:
 
     static void confirmDownTarget();
 
+    static unsigned long getLastIntervention();
 };
 
 

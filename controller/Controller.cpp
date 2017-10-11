@@ -7,9 +7,11 @@ BridgeActuator Controller::bridge_actuator = BridgeActuator();
 State Controller::target_state = Down;
 State Controller::current_state = Falling;
 
-double Controller::up_target = 150;
+double Controller::up_target = 165;
 double Controller::down_target = 90;
 double Controller::manual_target = 0;
+
+unsigned long Controller::last_intervention = 0;
 
 Button Controller::upButton = Button(BTN_UP_PIN,
                                      Controller::targetUp,
@@ -107,13 +109,15 @@ void Controller::toManual() {
 }
 
 void Controller::targetUp() {
+    last_intervention = millis();
     toManual();
-    manual_target += 0.5;
+    manual_target += 0.3;
 }
 
 void Controller::targetDown() {
     toManual();
-    manual_target -=0.5;
+    manual_target -=0.3;
+    last_intervention = millis();
 }
 
 void Controller::confirmUpTarget() {
@@ -132,4 +136,8 @@ void Controller::confirmDownTarget() {
         target_state = Down;
         manual_target = 0;
     }
+}
+
+unsigned long Controller::getLastIntervention() {
+    return last_intervention;
 }

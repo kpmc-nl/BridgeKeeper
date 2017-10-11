@@ -21,6 +21,15 @@ void UI::update() {
 //    if (last_display + DISPLAY_REFRESH_MS < millis()) {
 
 
+    if(millis() - Controller::getLastIntervention() > 10000){
+        lcd->noBacklight();
+    }else{
+        lcd ->backlight();
+    }
+
+
+//    lcd->setBacklight(millis() - Controller::getLastIntervention() < 10000);
+
     lcd->clear();
 
     lcd->setCursor(0, 0);

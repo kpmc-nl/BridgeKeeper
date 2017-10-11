@@ -86,5 +86,5 @@ uint8_t BridgeActuator::getPower() {
     if (diff > 7.0) {
         return 128;
     }
-    return map(diff * 100, 0, 700, 78, 128);
+    return map(diff * 100, 0, 700, 84, 128);
 }

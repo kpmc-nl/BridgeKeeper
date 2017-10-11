@@ -20,7 +20,7 @@ void setup() {
     tx_buf[0] = sizeof(remote_msg_t) + 1;
 
 
-    pinMode(PIN_B2, OUTPUT);
+    pinMode(PIN_A7, OUTPUT);
     pinMode(BTN1_PIN, INPUT);
     pinMode(BTN2_PIN, INPUT);
     pinMode(BTN3_PIN, INPUT);
@@ -36,9 +36,9 @@ void transmit() {
     memcpy(tx_buf + 1, &msg, sizeof(remote_msg_t));
     pole1_manchester.transmitArray(sizeof(remote_msg_t) + 1, tx_buf);
 
-//    digitalWrite(PIN_B2, HIGH);
-//    delay(100);
-//    digitalWrite(PIN_B2, LOW);
+    digitalWrite(PIN_A7, HIGH);
+    delay(100);
+    digitalWrite(PIN_A7, LOW);
 }
 
 
