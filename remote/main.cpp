@@ -13,10 +13,8 @@ Manchester pole1_manchester;
 
 remote_msg_t msg;
 uint8_t tx_buf[sizeof(remote_msg_t) + 1];
-uint8_t testblock[sizeof(remote_msg_t)];
 
 void setup() {
-    memset(testblock, 0, sizeof(testblock));
     tx_buf[0] = sizeof(remote_msg_t) + 1;
 
 
@@ -32,12 +30,9 @@ void setup() {
 }
 
 void transmit() {
-
+    digitalWrite(PIN_A7, HIGH);
     memcpy(tx_buf + 1, &msg, sizeof(remote_msg_t));
     pole1_manchester.transmitArray(sizeof(remote_msg_t) + 1, tx_buf);
-
-    digitalWrite(PIN_A7, HIGH);
-    delay(100);
     digitalWrite(PIN_A7, LOW);
 }
 
@@ -45,33 +40,22 @@ void transmit() {
 void readBtn(uint8_t pin, uint8_t *target) {
     if (digitalRead(pin)) {
         while (digitalRead(pin)) {
-            /* somewhat crude busy wait debounce ;) */
+            *target = HIGH;
+            transmit();
+            delay(40);
         }
-        *target = HIGH;
-    } else {
-        *target = LOW;
     }
+    *target = LOW;
 }
-
-boolean shouldSend() {
-    return 0 != memcmp(testblock, &msg, sizeof(remote_msg_t));
-}
-
 
 int main() {
     init();
 
     setup();
 
-    while (1) {
-
+    while (true) {
         readBtn(BTN1_PIN, &msg.button1);
         readBtn(BTN2_PIN, &msg.button2);
         readBtn(BTN3_PIN, &msg.button3);
-
-
-        if (shouldSend()) {
-            transmit();
-        }
     }
 }
