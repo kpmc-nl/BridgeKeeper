@@ -9,6 +9,8 @@
 
 class BridgeActuator {
 
+private:
+    unsigned long boost_time;
 
 
 public:

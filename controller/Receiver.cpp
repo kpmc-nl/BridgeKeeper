@@ -26,11 +26,11 @@ void Receiver::update() {
             memcpy(&current_message, buffer + 1, sizeof(remote_msg_t));
 
             if (current_message.button1) {
-                Controller::setTargetState(Up_L);
+                Controller::setTargetState(/*Up_L*/ Up);
             } else if (current_message.button2) {
                 Controller::setTargetState(Down);
             } else if (current_message.button3) {
-                Controller::setTargetState(Up_R);
+                Controller::setTargetState(/*Up_R*/ Up);
             }
 
 

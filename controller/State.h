@@ -3,7 +3,7 @@
 
 
 enum State {
-    Up_L, Up_R, Down, Rising, Falling, Manual
+    /*Up_L, Up_R,*/ Up, Down, Rising, Falling, Idle
 };
 
 #endif //BRIDGEKEEPER_STATE_H

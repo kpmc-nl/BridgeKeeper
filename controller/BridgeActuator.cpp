@@ -8,71 +8,65 @@ void BridgeActuator::setup() {
     pinMode(MOTOR_ENABLE, OUTPUT);
     pinMode(MOTOR_FWD, OUTPUT);
     pinMode(MOTOR_BACK, OUTPUT);
+    pinMode(BOOST, OUTPUT);
 
+    boost_time = 0;
 }
 
+
 void BridgeActuator::update() {
-
-
     State tgt = Controller::getTargetState();
     State cur = Controller::getCurrentState();
 
+    digitalWrite(LED1_PIN, LOW);
+    digitalWrite(LED2_PIN, LOW);
 
-    if (cur == Manual) {
+    if (tgt == Up ||
+        cur == Idle && tgt != Idle ||
+        cur == Rising && tgt == Down) {
+        digitalWrite(BOOST, HIGH);
+        boost_time = millis();
+    }
+    if (boost_time + 500 < millis()) {
+        digitalWrite(BOOST, LOW);
+    }
 
-        double t = Controller::getManualTargetAngle();
-        double a = Controller::getAngleSensor()->getAngle();
-
-        if (abs(t - a) < 0.5) {
+    switch (tgt) {
+        case Idle:
+        default:
             stay();
-        } else {
-            digitalWrite(MOTOR_ENABLE, HIGH);
-            if (t > a) {
-                analogWrite(MOTOR_FWD, 128);
-                digitalWrite(MOTOR_BACK, LOW);
-            } else {
-                digitalWrite(MOTOR_FWD, LOW);
-                analogWrite(MOTOR_BACK, 128);
-            }
-        }
-
-    } else if (cur == tgt) {
-        stay();
-        digitalWrite(LED1_PIN, LOW);
-        digitalWrite(LED2_PIN, HIGH);
-    } else {
-        digitalWrite(LED1_PIN, HIGH);
-        digitalWrite(LED2_PIN, LOW);
-
-        switch (tgt) {
-            case Up_L:
-            case Up_R:
-                rise();
-                break;
-            case Down:
-                fall();
-                break;
-        }
+            break;
+//            case Up_L:
+//            case Up_R:
+        case Up:
+            digitalWrite(LED1_PIN, HIGH);
+            rise();
+            break;
+        case Down:
+            digitalWrite(LED2_PIN, HIGH);
+            fall();
+            break;
     }
 }
 
 void BridgeActuator::stay() {
-    analogWrite(MOTOR_ENABLE, 0);
+    digitalWrite(MOTOR_ENABLE, LOW);
     digitalWrite(MOTOR_FWD, LOW);
     digitalWrite(MOTOR_BACK, LOW);
+    Controller::setCurrentState(Idle);
 }
 
 void BridgeActuator::rise() {
-    digitalWrite(MOTOR_ENABLE, HIGH);
-    analogWrite(MOTOR_FWD, getPower());
+    analogWrite(MOTOR_ENABLE, getPower());
+    digitalWrite(MOTOR_FWD, HIGH);
     digitalWrite(MOTOR_BACK, LOW);
     Controller::setCurrentState(Rising);
 }
 
 void BridgeActuator::fall() {
-    digitalWrite(MOTOR_ENABLE, HIGH);
+    analogWrite(MOTOR_ENABLE, getPower());
     digitalWrite(MOTOR_FWD, LOW);
-    analogWrite(MOTOR_BACK, getPower());
+    digitalWrite(MOTOR_BACK, HIGH);
     Controller::setCurrentState(Falling);
 }
 
@@ -86,5 +80,5 @@ uint8_t BridgeActuator::getPower() {
     if (diff > 7.0) {
         return 128;
     }
-    return map(diff * 100, 0, 700, 84, 128);
+    return map(diff * 100, 0, 700, 95, 128);
 }

@@ -40,7 +40,6 @@ include_directories(../lib/manchester)
 include_directories(../protocol)
 include_directories(../lib/MPU6050)
 include_directories(../lib/I2Cdev)
-include_directories(../lib/LiquidCrystal)
 #
 set(SOURCE_FILES
         ${ARDUINO_SOURCE_FILES}
@@ -51,22 +50,11 @@ set(SOURCE_FILES
         ../lib/I2Cdev/I2Cdev.cpp
         ../lib/MPU6050/MPU6050.cpp
 
-        ../lib/LiquidCrystal/LiquidCrystal_I2C.h
-        ../lib/LiquidCrystal/LiquidCrystal_I2C.cpp
-
-        ../lib/LiquidCrystal/LCD.h
-        ../lib/LiquidCrystal/LCD.cpp
-
-        ../lib/LiquidCrystal/I2CIO.h
-        ../lib/LiquidCrystal/I2CIO.cpp
-
         Controller.h Controller.cpp
         State.h Pinout.h
         AngleSensor.h AngleSensor.cpp
         BridgeActuator.h BridgeActuator.cpp
         Receiver.h Receiver.cpp
-        UI.h UI.cpp
-        Button.h Button.cpp
 
         main.cpp
 
