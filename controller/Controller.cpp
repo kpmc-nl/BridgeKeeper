@@ -7,14 +7,19 @@ State Controller::target_state = Idle;
 State Controller::current_state = Idle;
 
 double Controller::up_target = 165;
-double Controller::down_target = 90;
+double Controller::down_target = 75;
 
 
 void Controller::setup() {
     receiver.setup();
     angle_sensor.setup();;
     bridge_actuator.setup();
+
+    pinMode(MOTOR_FEEDBACK, INPUT_PULLUP);
 }
+
+unsigned long fb_time =0;
+bool fb_active = false;
 
 void Controller::update() {
     angle_sensor.update();
@@ -31,11 +36,29 @@ void Controller::update() {
             break;
 
         case Down:
-            if (angle_sensor.getAngle() <= getDownTargetAngle()) {
+//            if (angle_sensor.getAngle() <= getDownTargetAngle()) {
+//                target_state = Idle;
+//            }
+
+            bool fb =  digitalRead(MOTOR_FEEDBACK) == LOW;
+
+            if(!fb_active && fb){
+                fb_active = true;
+                fb_time = millis();
+            }
+            if(!fb){
+                fb_active = false;
+            }
+
+            if(fb && fb_time + 1000 > millis()){
                 target_state = Idle;
             }
+
+
             break;
     }
+
+
 
     bridge_actuator.update();
 }

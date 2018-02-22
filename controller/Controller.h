@@ -20,6 +20,8 @@ private:
     static double up_target;
     static double down_target;
 
+
+
 public:
 
 
