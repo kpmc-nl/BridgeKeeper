@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "pinout.h"
 
 unsigned long time;
 
@@ -7,26 +8,25 @@ void handle_interrupt();
 void setup() {
     analogReference(INTERNAL2V56_NO_CAP);
 
-    pinMode(PB0, OUTPUT);
-    pinMode(PB2, INPUT);
-    pinMode(PB4, OUTPUT);
-    pinMode(A3, INPUT);
-    attachInterrupt(0, handle_interrupt, FALLING);
+    pinMode(MOTOR_ENABLE_PIN, INPUT);
+    pinMode(SIGNAL_OUT_PIN, OUTPUT);
+    pinMode(SIGNAL_IN_PIN, INPUT);
+    attachInterrupt(MOTOR_ENABLE_INT, handle_interrupt, FALLING);
 }
 
 void loop() {
     if(time + 1000 < millis()){
-        digitalWrite(PB4, HIGH);
+        digitalWrite(SIGNAL_OUT_PIN, HIGH);
     }
 }
 
 void handle_interrupt(){
 
-    if(analogRead(A3) > 560){
+    if(analogRead(SIGNAL_IN_PIN) > 560){
         time = millis();
-        digitalWrite(PB4, LOW);
+        digitalWrite(SIGNAL_OUT_PIN, LOW);
     }else{
-        digitalWrite(PB4, HIGH);
+        digitalWrite(SIGNAL_OUT_PIN, HIGH);
     }
 }
 
