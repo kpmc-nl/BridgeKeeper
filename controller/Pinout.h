@@ -9,7 +9,7 @@
 #define BOOST 11
 
 
-#define MOTOR_FEEDBACK A3
+#define MOTOR_FEEDBACK 3
 
 #define NAV_L_1_PIN 7
 #define NAV_L_2_PIN 9

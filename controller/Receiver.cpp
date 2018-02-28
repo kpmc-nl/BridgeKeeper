@@ -30,7 +30,8 @@ void Receiver::update() {
             } else if (current_message.button2) {
                 Controller::setTargetState(Down);
             } else if (current_message.button3) {
-                Controller::setTargetState(/*Up_R*/ Up);
+                Controller::setTargetState(Idle);
+//                Controller::setTargetState(/*Up_R*/ Up);
             }
 
 

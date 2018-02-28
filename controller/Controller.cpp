@@ -6,7 +6,7 @@ BridgeActuator Controller::bridge_actuator = BridgeActuator();
 State Controller::target_state = Idle;
 State Controller::current_state = Idle;
 
-double Controller::up_target = 165;
+double Controller::up_target = 160;
 double Controller::down_target = 75;
 
 
@@ -36,9 +36,9 @@ void Controller::update() {
             break;
 
         case Down:
-//            if (angle_sensor.getAngle() <= getDownTargetAngle()) {
-//                target_state = Idle;
-//            }
+            if (angle_sensor.getAngle() <= getDownTargetAngle()) {
+                target_state = Idle;
+            }
 
             bool fb =  digitalRead(MOTOR_FEEDBACK) == LOW;
 
@@ -50,7 +50,7 @@ void Controller::update() {
                 fb_active = false;
             }
 
-            if(fb && fb_time + 1000 > millis()){
+            if(fb_active && fb_time + 200 < millis()){
                 target_state = Idle;
             }
 
