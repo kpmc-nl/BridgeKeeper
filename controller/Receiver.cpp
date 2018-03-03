@@ -7,6 +7,8 @@
 #include "Pinout.h"
 #include "Controller.h"
 
+unsigned long last_recv_time;
+
 Receiver::Receiver() {
     manchester = new Manchester();
 }
@@ -34,9 +36,13 @@ void Receiver::update() {
 //                Controller::setTargetState(/*Up_R*/ Up);
             }
 
-
+            last_recv_time = millis();
         }
         manchester->beginReceiveArray(sizeof(remote_msg_t) + 1, buffer);
+    }
+
+    if(last_recv_time + 500 < millis()){
+//        Controller::setTargetState(Idle);
     }
 
 }
