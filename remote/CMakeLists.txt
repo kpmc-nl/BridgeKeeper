@@ -5,6 +5,7 @@ project(remote)
 set(AVR_MCU "attiny841")
 set(AVR_FCPU "8000000")
 set(AVRDUDE_OPTIONS -C${CMAKE_CURRENT_SOURCE_DIR}/avrdude.conf)
+set(ATTINY_CORE_PATH ../lib/ATTinyCore)
 
 include(env.cmake)
 

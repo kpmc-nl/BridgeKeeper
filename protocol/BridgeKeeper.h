@@ -18,6 +18,7 @@ typedef struct {
     uint8_t button1 = LOW;
     uint8_t button2 = LOW;
     uint8_t button3 = LOW;
+    uint8_t button4 = LOW;
 
 } remote_msg_t;
 

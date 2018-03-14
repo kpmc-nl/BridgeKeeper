@@ -10,6 +10,7 @@ Manchester pole1_manchester;
 #define BTN1_PIN PIN_A1
 #define BTN2_PIN PIN_A2
 #define BTN3_PIN PIN_A3
+#define BTN4_PIN PIN_A4
 
 remote_msg_t msg;
 uint8_t tx_buf[sizeof(remote_msg_t) + 1];
@@ -22,6 +23,7 @@ void setup() {
     pinMode(BTN1_PIN, INPUT);
     pinMode(BTN2_PIN, INPUT);
     pinMode(BTN3_PIN, INPUT);
+    pinMode(BTN4_PIN, INPUT);
 
     pinMode(TX_PIN, OUTPUT);
 
@@ -57,5 +59,6 @@ int main() {
         readBtn(BTN1_PIN, &msg.button1);
         readBtn(BTN2_PIN, &msg.button2);
         readBtn(BTN3_PIN, &msg.button3);
+        readBtn(BTN4_PIN, &msg.button4);
     }
 }
