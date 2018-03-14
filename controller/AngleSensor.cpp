@@ -27,6 +27,6 @@ void AngleSensor::update() {
 }
 
 double AngleSensor::getAngle() {
-    return 178-angle;
+    return 180-angle;
 //    return angle;
 }

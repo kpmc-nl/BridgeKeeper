@@ -2,9 +2,10 @@ cmake_minimum_required(VERSION 2.6)
 
 project(controller)
 
-set(AVR_MCU "atmega32u4")
+set(AVR_MCU "atmega328p")
 set(AVR_FCPU "16000000")
-set(ARDUINO_VARIANT "leonardo")
+set(ARDUINO_VARIANT "standard")
+set(ATTINY_CORE_PATH ../lib/ATTinyCore)
 
 include(env.cmake)
 
@@ -55,6 +56,7 @@ set(SOURCE_FILES
         AngleSensor.h AngleSensor.cpp
         BridgeActuator.h BridgeActuator.cpp
         Receiver.h Receiver.cpp
+        BatterySensor.h BatterySensor.cpp
 
         main.cpp
 

@@ -7,6 +7,7 @@
 #include "Receiver.h"
 #include "BridgeActuator.h"
 #include "Pinout.h"
+#include "BatterySensor.h"
 
 class Controller {
 
@@ -15,6 +16,7 @@ private:
     static AngleSensor angle_sensor;
     static Receiver receiver;
     static BridgeActuator bridge_actuator;
+    static BatterySensor battery_sensor;
     static State target_state;
     static State current_state;
     static double up_target;
@@ -42,6 +44,8 @@ public:
     static void setCurrentState(State state);
 
     static AngleSensor *getAngleSensor();
+
+    static BatterySensor *getBatterySensor();
 
 };
 

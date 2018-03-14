@@ -27,13 +27,13 @@ void Receiver::update() {
 
             memcpy(&current_message, buffer + 1, sizeof(remote_msg_t));
 
+
             if (current_message.button1) {
-                Controller::setTargetState(/*Up_L*/ Up);
-            } else if (current_message.button2) {
                 Controller::setTargetState(Down);
-            } else if (current_message.button3) {
+            } else if (current_message.button2) {
+                Controller::setTargetState(Up);
+            } else if (current_message.button3 || current_message.button4) {
                 Controller::setTargetState(Idle);
-//                Controller::setTargetState(/*Up_R*/ Up);
             }
 
             last_recv_time = millis();

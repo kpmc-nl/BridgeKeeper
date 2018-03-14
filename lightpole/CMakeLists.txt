@@ -2,10 +2,11 @@ cmake_minimum_required(VERSION 2.6)
 
 project(lightpole)
 
-include(env.cmake)
-
 set(AVR_MCU "attiny45")
 set(AVR_FCPU "1000000")
+set(ATTINY_CORE_PATH ../lib/ATTinyCore)
+
+include(env.cmake)
 
 add_definitions(-DARDUINO_ARCH_AVR)
 

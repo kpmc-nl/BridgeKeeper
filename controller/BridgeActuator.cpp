@@ -23,11 +23,15 @@ void BridgeActuator::update() {
 
     if (tgt == Up ||
         cur == Idle && tgt != Idle ||
-        cur == Rising && tgt == Down) {
+        cur == Rising && tgt == Down ||
+            (digitalRead(END_STOP) == LOW &&
+             Controller::getAngleSensor()->getAngle() <= Controller::getDownTargetAngle() + 5)
+            ) {
         digitalWrite(BOOST, HIGH);
         boost_time = millis();
     }
-    if (boost_time + 500 < millis()) {
+
+    if (boost_time + 500 < millis() || (tgt == Down && digitalRead(END_STOP) == LOW)) {
         digitalWrite(BOOST, LOW);
     }
 
@@ -71,14 +75,34 @@ void BridgeActuator::fall() {
 }
 
 uint8_t BridgeActuator::getPower() {
+    cli();
     double angle = Controller::getAngleSensor()->getAngle();
     double down = Controller::getDownTargetAngle();
     double up = Controller::getUpTargetAngle();
 
-    double diff = min(abs(angle - down), abs(angle - up));
-
-    if (diff > 7.0) {
+    if(Controller::getTargetState() == Down && angle > up - 10){
         return 128;
     }
-    return map(diff * 100, 0, 700, 100, 128);
+
+    double diff = min(abs(angle - down), abs(angle - up));
+
+    long min = 128 - map(Controller::getBatterySensor()->getVoltage(), BATT_EMPTY, BATT_FULL, 0, 84);
+    long max = min + 84;
+
+    if(Controller::getTargetState() == Up){
+        min += 25 - map(Controller::getBatterySensor()->getVoltage(), BATT_EMPTY, BATT_FULL, 0, 10);
+    }
+
+    int threshold = 10;
+    if(Controller::getTargetState() == Down){
+        threshold = 20;
+    }
+
+    if (diff > threshold) {
+        return max;
+    }
+
+    uint8_t res =map(diff * 100, 0, threshold*100, min, max);
+    sei();
+    return res;
 }
