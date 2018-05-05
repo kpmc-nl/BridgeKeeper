@@ -7,7 +7,7 @@ BatterySensor Controller::battery_sensor = BatterySensor();
 State Controller::target_state = Idle;
 State Controller::current_state = Idle;
 
-#define UP_ANGLE_DIFF 60
+#define UP_ANGLE_DIFF 70
 
 double Controller::down_target = 80;
 double Controller::up_target = 150;
@@ -71,9 +71,9 @@ void Controller::update() {
 
             if(fb_active && fb_time + 800 < millis()){
                 target_state = Idle;
-                angle_sensor.update();
-                down_target = angle_sensor.getAngle();
-                up_target = down_target + UP_ANGLE_DIFF;
+//                angle_sensor.update();
+//                down_target = angle_sensor.getAngle();
+//                up_target = down_target + UP_ANGLE_DIFF;
             }
 
 

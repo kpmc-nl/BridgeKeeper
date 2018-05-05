@@ -41,9 +41,9 @@ void Receiver::update() {
         manchester->beginReceiveArray(sizeof(remote_msg_t) + 1, buffer);
     }
 
-    if(last_recv_time + 500 < millis()){
+//    if(last_recv_time + 500 < millis()){
 //        Controller::setTargetState(Idle);
-    }
+//    }
 
 }
 

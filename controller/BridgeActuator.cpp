@@ -76,17 +76,28 @@ void BridgeActuator::fall() {
 
 uint8_t BridgeActuator::getPower() {
     cli();
+
+
+    if(Controller::getTargetState() == Down){
+        return 190 - map(Controller::getBatterySensor()->getVoltage(), BATT_EMPTY, BATT_FULL, 0, 62);
+    }
+
+//    return 128;
+//    return 190 - map(Controller::getBatterySensor()->getVoltage(), BATT_EMPTY, BATT_FULL, 0, 62);
+//    return 160 - map(Controller::getBatterySensor()->getVoltage(), BATT_EMPTY, BATT_FULL, 0, 32);
+
+
     double angle = Controller::getAngleSensor()->getAngle();
     double down = Controller::getDownTargetAngle();
     double up = Controller::getUpTargetAngle();
 
-    if(Controller::getTargetState() == Down && angle > up - 10){
-        return 128;
-    }
+//    if(Controller::getTargetState() == Down && angle > up - 10){
+//        return 128;
+//    }
 
     double diff = min(abs(angle - down), abs(angle - up));
 
-    long min = 128 - map(Controller::getBatterySensor()->getVoltage(), BATT_EMPTY, BATT_FULL, 0, 84);
+    long min = 128 - map(Controller::getBatterySensor()->getVoltage(), BATT_EMPTY, BATT_FULL, 0, 64);
     long max = min + 84;
 
     if(Controller::getTargetState() == Up){
